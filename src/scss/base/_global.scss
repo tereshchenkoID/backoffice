@@ -1,0 +1,83 @@
+@use '../config' as *;
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+body {
+  @include smooth-font;
+
+  min-width: rem(1200px);
+  min-height: 100vh;
+  overflow-y: auto;
+  line-height: var(--line-height);
+  color: rgba(0, 0, 0, 0.87);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  font-weight: var(--typography-thin);
+  background-color: #fafafa;
+}
+
+button {
+  @include reset-button;
+}
+
+a,
+.a {
+  @include transition(all);
+
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+
+  &:active,
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+p {
+  @include make-spacer(p, 0);
+  @include make-spacer(m, 0);
+}
+
+ul,
+ol {
+  @include reset-list;
+}
+
+.picture,
+.img {
+  @include size(100%);
+
+  display: block;
+  object-fit: contain;
+  object-position: center;
+
+  &--cover {
+    object-fit: cover;
+  }
+
+  &--responsive {
+    height: auto;
+  }
+}
+
+hr {
+  @include size(100%, rem(1px));
+
+  display: block;
+  background-color: var(--color-border);
+  border: 0;
+}
+
+.main {
+  @include make-spacer(p, 24px);
+  @include make-spacer(ml, 56px);
+
+  position: relative;
+  min-width: rem(1200px);
+  overflow-x: auto;
+}

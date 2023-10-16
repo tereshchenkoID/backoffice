@@ -1,0 +1,5 @@
+mixin checkbox(text, active)
+  label.checkbox&attributes(attributes)
+    input(type="checkbox" checked=active).checkbox__input
+    span= text
+    span.checkbox__item

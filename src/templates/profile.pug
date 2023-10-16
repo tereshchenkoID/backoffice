@@ -1,0 +1,20 @@
+---
+title: D-news
+lang: en
+---
+extends layouts/_layout
+
+block content
+  main.main
+    .paper
+      .paper__heaadline
+        h5 User Profile
+      hr.paper__hr
+      .paper__body
+        .paper__form
+          +field('Id')(type="text" value='1316' readonly='true')
+          +field('Username or email')(type="text" value='manager' readonly='true')
+          +field('Password')(type="password" required="true")
+          .paper__block
+            +button('Save')(type="button").button--primary.u-mr-16
+            +button('Cancel')(type="button").button--default

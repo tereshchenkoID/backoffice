@@ -1,0 +1,47 @@
+@use 'src/scss/config' as *;
+
+.button {
+  @include reset-button;
+  @include size(fit-content, rem(38px));
+  @include transition(all);
+  @include make-spacer(px, 20px);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: var(--default-border-radius);
+  overflow: hidden;
+
+  &__text {
+    position: relative;
+    font-size: rem(14px);
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    color: currentColor;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  &--default {
+    border: rem(1px) solid var(--color-border);
+
+    &:hover {
+      background-color: var(--color-border);
+    }
+  }
+
+  &--primary {
+    background-color: var(--color-primary);
+    border: rem(1px) solid var(--color-primary);
+    color: var(--color-white);
+
+    &:hover {
+      background-color: var(--color-primary-hover);
+    }
+  }
+}

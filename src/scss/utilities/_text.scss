@@ -1,0 +1,55 @@
+@use '../config' as *;
+
+// Text Transform
+
+.u-text-transform-capitalize {
+  text-transform: capitalize;
+}
+
+.u-text-transform-uppercase {
+  text-transform: uppercase;
+}
+
+
+// Text Decoration
+
+.u-text-decoration-underline {
+  text-decoration: underline;
+}
+
+.u-text-decoration-none {
+  text-decoration: none;
+}
+
+
+// Text Align
+
+.u-text-center {
+  text-align: center;
+}
+
+.u-text-left {
+  text-align: left;
+}
+
+.u-text-right {
+  text-align: right;
+}
+
+
+// Font Weight
+
+.u-text-medium {
+  font-weight: var(--typography-medium);
+}
+
+.u-text-bold {
+  font-weight: var(--typography-bold);
+}
+
+
+// Font Family
+
+.u-text-headline {
+  font-family: var(--font-family-headline);
+}

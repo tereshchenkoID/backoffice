@@ -1,0 +1,80 @@
+-
+  var menu = [
+    {
+      text: "Wallet System",
+      list: [
+        {
+          text: "Accounts",
+          link: "#"
+        },
+        {
+          text: "Transfer Search",
+          link: "#"
+        }
+      ]
+    },
+    {
+      text: "User Management",
+      list: [
+        {
+          text: "Agents and Shops",
+          link: "#"
+        },
+      ]
+    },
+    {
+      text: "Tickets Management",
+      list: [
+        {
+          text: "Tickets Search",
+          link: "#"
+        },
+      ]
+    },
+    {
+      text: "Financial",
+      list: [
+        {
+          text: "Settlement",
+          link: "#"
+        },
+        {
+          text: "General Overview",
+          link: "#"
+        },
+        {
+          text: "Game Type Usage",
+          link: "#"
+        },
+        {
+          text: "Daily Sums",
+          link: "#"
+        },
+        {
+          text: "Commission",
+          link: "#"
+        },
+      ]
+    },
+    {
+      text: "My Account",
+      list: []
+    },
+  ]
+
+mixin nav
+  nav.nav&attributes(attributes)
+    .nav__wrapper
+      .nav__logo
+      hr.hr
+      ul.hav__list
+        each item in menu
+          li.nav__item
+            a.nav__link.js-nav-link
+              i.fa.fa-wallet.nav__icon
+              span= item.text
+              if item.list.length !== 0
+                i.fa.fa-angle-down.nav__arrow
+            .submenu.js-submenu
+              each link in item.list
+                a(href=link.link).submenu__item= link.text

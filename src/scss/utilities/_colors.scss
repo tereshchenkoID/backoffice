@@ -1,0 +1,14 @@
+@use "sass:math";
+@use '../config' as *;
+
+$colors: ();
+
+@mixin set-color($color) {
+  .u-color-#{$color} {
+    color: var(--color-#{$color});
+  }
+}
+
+@each $color in $colors {
+  @include set-color($color);
+}

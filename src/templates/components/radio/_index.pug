@@ -1,0 +1,5 @@
+mixin radio(text, name, active)
+  label.radio&attributes(attributes)
+    input(type="radio" name=name checked=active).radio__input
+    span.radio__item
+    span= text

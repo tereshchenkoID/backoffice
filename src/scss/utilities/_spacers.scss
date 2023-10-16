@@ -1,0 +1,22 @@
+@use "sass:math";
+@use '../config' as *;
+
+$spacings: (8, 16);
+$directions: ('m', 'mt', 'mr', 'mb', 'ml', 'mx', 'my', 'p', 'pt', 'pr', 'pb', 'pl', 'px', 'py');
+
+@mixin set-spacing($spacing, $direction) {
+  .u-#{$direction}-#{$spacing} {
+    @include make-spacer($direction, #{$spacing}px);
+  }
+}
+
+@each $spacing in $spacings {
+  @each $direction in $directions {
+    @include set-spacing($spacing, $direction);
+  }
+}
+
+.u-mx-auto {
+  margin-right: auto;
+  margin-left: auto;
+}

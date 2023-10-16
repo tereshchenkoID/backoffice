@@ -1,0 +1,16 @@
+mixin header
+  header.header&attributes(attributes)
+    .preview
+      h6.preview__title Administration Overview
+      .preview__time.js-preview-time
+    .account
+      .account__icon.js-account-icon
+        svg(viewbox='0 0 24 24' aria-hidden='true')
+          path(d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z')
+      .account__dropdown.js-account-dropdown
+        .account__item
+          span id:
+            strong 13
+          span user@gmail.com
+        a(href="./profile.html").account__link Profile
+        a(href="#").account__link Log Out

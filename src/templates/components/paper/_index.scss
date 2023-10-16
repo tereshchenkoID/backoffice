@@ -1,0 +1,19 @@
+@use 'src/scss/config' as *;
+
+.paper {
+  @include make-spacer(p, 16px);
+
+  border-radius: var(--default-border-radius);
+  box-shadow: var(--default-box-shadow);
+  background-color: var(--color-white);
+  max-width: 50%;
+
+  &__hr {
+    @include make-spacer(my, 24px);
+  }
+
+  &__form {
+    display: grid;
+    gap: rem(20px);
+  }
+}

@@ -1,0 +1,47 @@
+@use 'src/scss/config' as *;
+
+.checkbox {
+  @include flex($align-items: center);
+  @include make-spacer(pl, 35px);
+
+  position: relative;
+  cursor: pointer;
+  height: rem(25px);
+  font-size: rem(14px);
+
+  &:hover {
+
+    .checkbox {
+
+      &__item {
+        border-color: var(--color-primary);
+      }
+    }
+  }
+
+  &__input {
+    @include size(0);
+
+    position: absolute;
+    opacity: 0;
+
+    &:checked ~ .checkbox {
+
+      &__item {
+        background-color: var(--color-primary);
+      }
+    }
+  }
+
+  &__item {
+    @include transition(all);
+    @include size(rem(25px));
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--border-radius);
+    background-color: var(--color-cod-gray);
+    border: rem(1px) solid var(--color-cod-gray);
+  }
+}

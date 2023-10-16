@@ -1,0 +1,51 @@
+@use 'src/scss/config' as *;
+
+.field {
+  @include size(100%, rem(56px));
+
+  position: relative;
+
+  :is(input:focus, input:valid) {
+
+    ~ label {
+      transform: translateY(rem(-23px));
+      font-size: rem(12px);
+    }
+  }
+
+  &__input {
+    @include make-spacer(px, 16px);
+    @include size(100%);
+
+    border: 0;
+    font-weight: var(--typography-thin);
+    border-radius: var(--default-border-radius);
+    border: rem(1px) solid var(--color-border);
+    overflow: hidden;
+
+    &:focus {
+      outline: 0;
+      border-color: var(--color-primary);
+    }
+
+    &:read-only {
+      opacity: 0.6;
+
+      ~ label {
+        transform: translateY(rem(-23px));
+        font-size: rem(12px);
+      }
+    }
+  }
+
+  &__label {
+    @include make-spacer(px, 4px);
+    @include transition;
+
+    position: absolute;
+    top: rem(16px);
+    left: rem(16px);
+    background-color: var(--color-white);
+    color: rgba(0, 0, 0, 0.6)
+  }
+}

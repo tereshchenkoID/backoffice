@@ -1,0 +1,18 @@
+@use 'src/scss/config' as *;
+
+.select {
+  @include make-spacer(px, 20px);
+  @include size(100%, rem(45px));
+  @include transition(all);
+
+  border-radius: var(--border-radius);
+  background-color: var(--color-cod-gray);
+  border: rem(1px) solid var(--color-border);
+  color: var(--color-text);
+
+  &:focus {
+    outline: 0;
+    border-color: var(--color-primary);
+    background-color: var(--color-mine-shaft);
+  }
+}
