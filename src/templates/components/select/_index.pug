@@ -1,0 +1,6 @@
+mixin select(placeholder, options)
+  .select.js-select
+    select&attributes(attributes).select__input.js-select-input
+      each item in options
+        option(value=item.value)= item.text
+    label.select__label= placeholder

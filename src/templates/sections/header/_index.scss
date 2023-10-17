@@ -1,79 +1,17 @@
 @use 'src/scss/config' as *;
 
 .header {
-  @include flex(null, center);
   @include make-spacer(px, 24px);
   @include make-spacer(ml, 56px);
 
+  display: grid;
+  grid-template-columns: 1fr rem(80px) auto;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  column-gap: rem(15px);
   background-color: var(--color-primary);
   box-shadow: var(--default-box-shadow);
   min-height: rem(64px);
-}
-
-.preview {
-  color: var(--color-white);
-
-  &__time {
-    font-size: rem(14px);
-  }
-}
-
-.account {
-  @include make-spacer(ml, auto);
-  @include make-spacer(mr, 0);
-
-  position: relative;
-
-  &__link,
-  &__item {
-    @include flex;
-    @include make-spacer(px, 16px);
-    @include make-spacer(py, 5px);
-
-    min-height: rem(36px);
-  }
-
-  &__icon {
-    @include flex(center, center);
-    @include size(rem(40px));
-
-    cursor: pointer;
-    border-radius: 50%;
-    background-color: #bdbdbd;
-    color: #fafafa;
-
-    svg {
-      @include size(75%);
-
-      fill: currentColor;
-    }
-  }
-
-  &__dropdown {
-    @include make-spacer(py, 8px);
-
-    display: none;
-    position: absolute;
-    top: calc(100% + rem(12px));
-    right: 0;
-    width: rem(250px);
-    background-color: var(--color-white);
-    box-shadow: var(--default-box-shadow);
-    border-radius: var(--default-border-radius);
-  }
-
-  &__item {
-    flex-direction: column;
-    font-size: rem(14px);
-    font-weight: var(--typography-medium);
-    opacity: 0.7;
-  }
-
-  &__link {
-    align-items: center;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-  }
+  z-index: $z-index-10;
 }

@@ -11,18 +11,22 @@
   transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
   width: rem(56px);
   overflow: hidden;
-  //width: rem(240px);
 
   &:hover {
-    width: rem(256px);
+    width: rem(320px);
+  }
+
+  &__icon,
+  &__arrow {
+    opacity: 0.7;
   }
 
   &__wrapper {
-    width: rem(256px);
+    width: rem(320px);
   }
 
   &__logo {
-    @include size(100%, rem(56px));
+    @include size(100%, rem(64px));
   }
 
   &__link {
@@ -49,6 +53,11 @@
     }
   }
 
+  &__logo {
+    @include make-spacer(pl, rem(7px));
+    @include flex(null, center)
+  }
+
   &__icon {
     text-align: center;
   }
@@ -58,20 +67,27 @@
 
     text-align: right;
   }
+}
 
-  .submenu {
-    display: none;
+.logo {
+  @include size(rem(42px));
 
-    &__item {
-      @include make-spacer(pl, 56px);
-      @include flex(null, center);
+  display: block;
+  background-color: var(--color-secondary);
+}
 
-      height: rem(36px);
-      font-size: rem(14px);
+.submenu {
+  display: none;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
-      }
+  &__item {
+    @include make-spacer(pl, 56px);
+    @include flex(null, center);
+
+    height: rem(36px);
+    font-size: rem(14px);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
     }
   }
 }

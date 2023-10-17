@@ -1,18 +1,38 @@
 @use 'src/scss/config' as *;
 
 .select {
-  @include make-spacer(px, 20px);
-  @include size(100%, rem(45px));
-  @include transition(all);
+  @include size(100%, rem(56px));
 
-  border-radius: var(--border-radius);
-  background-color: var(--color-cod-gray);
-  border: rem(1px) solid var(--color-border);
-  color: var(--color-text);
+  position: relative;
 
-  &:focus {
-    outline: 0;
-    border-color: var(--color-primary);
-    background-color: var(--color-mine-shaft);
+  &__input {
+    @include size(100%, rem(56px));
+    @include make-spacer(px, 16px);
+
+    position: relative;
+    border-radius: var(--default-border-radius);
+    border: rem(1px) solid var(--color-border);
+    overflow: hidden;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' opacity='0.7' fill='%23000000' width='800px' height='800px' viewBox='-8.5 0 32 32' version='1.1'%3E%3Ctitle%3Eangle-down%3C/title%3E%3Cpath d='M7.28 20.040c-0.24 0-0.44-0.080-0.6-0.24l-6.44-6.44c-0.32-0.32-0.32-0.84 0-1.2 0.32-0.32 0.84-0.32 1.2 0l5.84 5.84 5.84-5.84c0.32-0.32 0.84-0.32 1.2 0 0.32 0.32 0.32 0.84 0 1.2l-6.44 6.44c-0.16 0.16-0.4 0.24-0.6 0.24z'/%3E%3C/svg%3E");  background-repeat: no-repeat;
+    background-position: right rem(16px) top 50%;
+    background-size: rem(24px);
+    font-weight: var(--typography-thin);
+
+    &:focus {
+      outline: 0;
+      border-color: var(--color-primary);
+    }
+  }
+
+  &__label {
+    @include make-spacer(px, 4px);
+
+    position: absolute;
+    top: rem(-7px);
+    left: rem(16px);
+    background-color: var(--color-white);
+    color: rgba(0, 0, 0, 0.8);
+    font-size: rem(12px);
   }
 }

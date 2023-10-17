@@ -1,4 +1,7 @@
-mixin field(placeholder, options)
-  .field
-    input&attributes(attributes).field__input
-    label.field__label= placeholder
+mixin field(placeholder, classname)
+  .field.js-field(class=classname)
+    input&attributes(attributes).field__input.js-field-input
+    label.field__label.js-field-label= placeholder
+    if classname === 'field--password'
+      button.field__eye.js-field-eye
+        i.fa.fa-eye

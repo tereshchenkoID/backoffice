@@ -20,6 +20,11 @@ gulp.task('copy:fonts', () => gulp
   .pipe(gulp.dest(config.dest.fonts))
 );
 
+gulp.task('copy:json', () => gulp
+  .src(`${config.src.json  }/**/*.*`)
+  .pipe(gulp.dest(config.dest.json))
+);
+
 gulp.task('copy:data', () => gulp
   .src(`${config.src.data  }/**/*.*`)
   .pipe(gulp.dest(config.dest.data))
@@ -36,9 +41,9 @@ gulp.task('copy:rootfiles', () => gulp
 );
 
 // eslint-disable-next-line no-shadow
-const build = gulp => gulp.series('copy:img', 'copy:fonts', 'copy:data');
+const build = gulp => gulp.series('copy:json', 'copy:img', 'copy:fonts', 'copy:data');
 // eslint-disable-next-line no-shadow
-const watch = gulp => () => gulp.watch(`${config.src.data  }/**/*`, gulp.parallel('copy:img', 'copy:fonts', 'copy:data'));
+const watch = gulp => () => gulp.watch(`${config.src.data  }/**/*`, gulp.parallel('copy:json', 'copy:img', 'copy:fonts', 'copy:data'));
 
 module.exports.build = build;
 module.exports.watch = watch;

@@ -1,0 +1,93 @@
+@use 'src/scss/config' as *;
+
+.dropdown {
+  position: relative;
+  font-size: rem(14px);
+  min-width: rem(80px);
+
+  &__selected {
+    @include flex(space-between, center);
+    @include size(100%, rem(40px));
+    @include make-spacer(pl, 16px);
+    @include make-spacer(pr, 12px);
+
+    gap: rem(5px);
+    position: relative;
+    font-weight: var(--typography-thin);
+    border-radius: var(--default-border-radius);
+    border: rem(1px) solid currentColor;
+    overflow: hidden;
+    min-width: rem(60px);
+    cursor: pointer;
+
+    &::before {
+      @include size(rem(1px), rem(24px));
+
+      position: absolute;
+      top: 50%;
+      right: rem(32px);
+      transform: translateY(-50%);
+      background-color: currentColor;
+      opacity: 0.5;
+      content: '';
+    }
+
+    span {
+      pointer-events: none;
+    }
+  }
+
+  &__list {
+    display: none;
+    position: absolute;
+    top: calc(100% + rem(12px));
+    left: 0;
+    right: 0;
+    background-color: var(--color-white);
+    box-shadow: var(--default-box-shadow);
+    border-radius: var(--default-border-radius);
+    z-index: $z-index-11;
+  }
+
+  &__link {
+    @include flex(null, center);
+    @include make-spacer(px, 16px);
+    @include make-spacer(py, 5px);
+
+    min-height: rem(36px);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    &--active {
+      display: none;
+    }
+  }
+
+  &__icon {
+    @include transition(transform, 0.3s);
+
+    pointer-events: none;
+  }
+
+  &--active {
+
+    .dropdown {
+
+      &__icon {
+        transform: rotateZ(180deg);
+      }
+    }
+  }
+
+  &--white {
+
+    .dropdown {
+
+      &__selected {
+        color: var(--color-white);
+      }
+    }
+  }
+}

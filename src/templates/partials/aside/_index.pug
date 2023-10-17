@@ -1,0 +1,28 @@
+mixin aside
+  aside.aside&attributes(attributes)
+    .aside__wrapper
+      .paper.paper--wide.paper--transparent
+        .paper__heaadline
+          h5 New Shop
+        hr.paper__hr
+        .paper__body
+          .paper__form
+            +field('Login')(type="text" required="true")
+            +field('Password', 'field--password')(type="password" required="true")
+            +field('Confirm Password', 'field--password')(type="password" required="true")
+            +field('Full Name')(type="text" required="true")
+            +field('Email')(type="email" required="true")
+            +field('Location')(type="text" required="true")
+            +select('User type', [
+              {
+                value: 0,
+                text: 'Ukraine'
+              },
+              {
+                value: 1,
+                text: 'Poland'
+              },
+            ])
+            .paper__block
+              +button('Save')(type="button").button--primary.u-mr-16
+              +button('Cancel')(type="button").button--default

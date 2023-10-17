@@ -1,0 +1,31 @@
+---
+title: D-news
+lang: en
+---
+extends layouts/_layout
+
+block content
+  main.main
+    .paper.paper--wide
+      .paper__heaadline
+        h5 Accounts
+      hr.paper__hr
+      .paper__body
+        .paper__form
+          .navbar.js-navbar
+          .table.js-table-accounts
+            .table__row
+              .table__cell(data-key="login")
+                strong Login
+              .table__cell(data-key="full_name")
+                strong Full Name
+              .table__cell(data-key="credits")
+                strong Credits
+              .table__cell(data-key="commission")
+                strong Pending Commission
+              .table__cell(data-key="currency")
+                strong Active Currency
+              .table__cell(data-key="locked")
+                strong Locked
+              .table__cell(data-key="add,edit,password,transfer")
+            .table__wrapper

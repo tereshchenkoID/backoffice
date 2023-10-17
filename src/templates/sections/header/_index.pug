@@ -1,8 +1,18 @@
 mixin header
   header.header&attributes(attributes)
     .preview
-      h6.preview__title Administration Overview
+      h6.preview__title(data-lang="title")
       .preview__time.js-preview-time
+
+    .dropdown.dropdown--white.js-dropdown
+      .dropdown__selected.js-dropdown-selected
+        span
+        .dropdown__icon.js-dropdown-icon
+          i.fa.fa-angle-down
+      .dropdown__list.js-dropdown-list
+        a(data-value="ua").dropdown__link.js-dropdown-link UA
+        a(data-value="en").dropdown__link.js-dropdown-link EN
+
     .account
       .account__icon.js-account-icon
         svg(viewbox='0 0 24 24' aria-hidden='true')
@@ -12,5 +22,5 @@ mixin header
           span id:
             strong 13
           span user@gmail.com
-        a(href="./profile.html").account__link Profile
-        a(href="#").account__link Log Out
+        a(href="./profile.html" data-lang="account_link_1").account__link
+        a(href="#" data-lang="account_link_2").account__link

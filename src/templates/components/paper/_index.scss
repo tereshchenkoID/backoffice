@@ -16,4 +16,14 @@
     display: grid;
     gap: rem(20px);
   }
+
+  &--wide {
+    max-width: 100%;
+  }
+
+  &--transparent {
+    background-color: transparent;
+    box-shadow: unset;
+    border-radius: unset;
+  }
 }

@@ -18,6 +18,7 @@ const config = {
         // sassGen      : 'src/sass/generated',
         scssGen      : 'src/scss/generated',
         js           : 'src/js',
+        json         : 'src/json',
         img          : 'src/img',
         svg          : 'src/img/svg',
         icons        : 'src/icons',
@@ -38,6 +39,7 @@ const config = {
         js   : destPath + '/js',
         img  : destPath + '/img',
         fonts: destPath + '/fonts',
+        json : destPath + '/json',
         lib  : destPath + '/lib',
         data : destPath + '/data'
     },

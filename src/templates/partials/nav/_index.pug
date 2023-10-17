@@ -1,80 +1,87 @@
 -
   var menu = [
     {
-      text: "Wallet System",
+      text: 'menu_1',
+      icon: 'fa-wallet',
       list: [
         {
-          text: "Accounts",
-          link: "#"
+          text: 'menu_2',
+          link: "./accounts.html"
         },
         {
-          text: "Transfer Search",
-          link: "#"
-        }
-      ]
-    },
-    {
-      text: "User Management",
-      list: [
-        {
-          text: "Agents and Shops",
+          text: 'menu_3',
           link: "#"
         },
       ]
     },
     {
-      text: "Tickets Management",
+      text: 'menu_4',
+      icon: 'fa-users',
       list: [
         {
-          text: "Tickets Search",
+          text: 'menu_5',
           link: "#"
         },
       ]
     },
     {
-      text: "Financial",
+      text: 'menu_6',
+      icon: 'fa-ticket-alt',
       list: [
         {
-          text: "Settlement",
-          link: "#"
-        },
-        {
-          text: "General Overview",
-          link: "#"
-        },
-        {
-          text: "Game Type Usage",
-          link: "#"
-        },
-        {
-          text: "Daily Sums",
-          link: "#"
-        },
-        {
-          text: "Commission",
+          text: 'menu_7',
           link: "#"
         },
       ]
     },
     {
-      text: "My Account",
+      text: 'menu_8',
+      icon: 'fa-credit-card',
+      list: [
+        {
+          text: 'menu_9',
+          link: "#"
+        },
+        {
+          text: 'menu_10',
+          link: "#"
+        },
+        {
+          text: 'menu_11',
+          link: "#"
+        },
+        {
+          text: 'menu_12',
+          link: "#"
+        },
+        {
+          text: 'menu_13',
+          link: "#"
+        },
+      ]
+    },
+    {
+      text: 'menu_14',
+      icon: 'fa-user',
+      src: './profile.html',
       list: []
-    },
+    }
   ]
 
 mixin nav
   nav.nav&attributes(attributes)
     .nav__wrapper
       .nav__logo
+        a(href="./index.html").logo
       hr.hr
       ul.hav__list
         each item in menu
           li.nav__item
-            a.nav__link.js-nav-link
-              i.fa.fa-wallet.nav__icon
-              span= item.text
+            a(href=item.src?`${item.src}`:'#').nav__link.js-nav-link
+              i.fa(class=item.icon).nav__icon
+              span(data-lang=`${item.text}`)
               if item.list.length !== 0
                 i.fa.fa-angle-down.nav__arrow
             .submenu.js-submenu
               each link in item.list
-                a(href=link.link).submenu__item= link.text
+                a(href=link.link data-lang=`${link.text}`).submenu__item
