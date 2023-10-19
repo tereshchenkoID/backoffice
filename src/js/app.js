@@ -1,4 +1,9 @@
+import {ACTIONS, SETTINGS} from "./constant";
+
+import Forms from './forms';
+
 function Base() {
+  this.base     = 'https://api.qool90.bet/api/'
   this.language = localStorage.getItem('lang') || 'en'
 }
 
@@ -57,19 +62,11 @@ Base.prototype.updateLanguage = function() {
 const base = new Base()
 base.updateLanguage()
 
-
-
-const SETTINGS = {
-  "locked": {
-    "0": "No",
-    "1": "Yes"
-  }
-}
-
+const forms = new Forms()
+// forms.init()
 
 
 function Table() {
-  this.base     = 'https://api.qool90.bet/api/'
   this.data     = []
   this.keys     = []
   this.navbar   = []
@@ -90,16 +87,16 @@ Table.prototype.setKeys = function(el) {
 
 Table.prototype.actionsData = function(type) {
   switch (type) {
-    case 'add':
-      return '<button class="action js-action" title="Add new agent"><i class="fa fa-plus"></i></button>'
-    case 'edit':
-      return '<button class="action js-action" title="Edit"><i class="fa fa-pencil-alt"></i></button>'
-    case 'transfer':
-      return '<button class="action" title="Transfer"><i class="fa fa-money-check"></i></button>'
-    case 'password':
-      return '<button class="action js-action" title="Change Password"><i class="fa fa-lock"></i></button>'
+    case ACTIONS.ADD:
+      return `<button class="action js-action" title="Add" data-type="${ACTIONS.ADD}"><i class="fa fa-plus"></i></button>`
+    case ACTIONS.EDIT:
+      return `<button class="action js-action" title="Edit" data-type="${ACTIONS.EDIT}"><i class="fa fa-pencil-alt"></i></button>`
+    case ACTIONS.TRANSFER:
+      return `<button class="action js-action" title="Transfer" data-type="${ACTIONS.TRANSFER}"><i class="fa fa-money-check"></i></button>`
+    case ACTIONS.PASSWORD:
+      return `<button class="action js-action" title="Change Password" data-type="${ACTIONS.PASSWORD}"><i class="fa fa-lock"></i></button>`
     default:
-      return '<button class="action js-action" title="Add"><i class="fa fa-plus"></i></button>'
+      return `<button class="action js-action" title="Add" data-type="${ACTIONS.ADD}"><i class="fa fa-plus"></i></button>`
   }
 }
 
@@ -118,14 +115,15 @@ Table.prototype.drawData = function() {
   const self = this
 
   this.data.data.forEach(function(item, index){
-    html += `<div class="table__row ${item.locked === '1' && 'table__row--disabled'}" data-parent="${index}">`
+    html += `<div class="table__row ${item.locked === '1' ? 'table__row--disabled' : ''}" data-parent="${index}">`
 
     self.keys.forEach(function(idx) {
         html += `<div class="table__cell">`
+
                 if (item[idx]) {
                   if (typeof item[idx] !== 'object') {
                     if (SETTINGS[idx])
-                      html += SETTINGS[idx][item[idx]]
+                      html += SETTINGS[idx][item[idx]] || item[idx]
                     else
                       html += item[idx]
                   }
@@ -188,12 +186,6 @@ Table.prototype.drawData = function() {
                               <span class="u-ml-8">Clients</span>
                             </button>
                           </div>
-                          <div class="table__cell">
-                             ${self.actionsData('add')}
-                             ${self.actionsData('edit')}
-                             ${self.actionsData('password')}
-                             ${self.actionsData('transfer')}
-                          </div>
                        </div>`
             }
   })
@@ -205,7 +197,7 @@ Table.prototype.getData = function(el, id = 0) {
   const self = this
   base.sendFormData(
     null,
-    `${this.base}/accounts/?id=${id}`,
+    `${base.base}/accounts/?id=${id}`,
     'GET',
     (response) => {
       if (response) {
@@ -277,16 +269,314 @@ $('body').on('click', '.js-navbar-link', function() {
   table.updateNavbar()
 })
 
+$('body').on('click', '.js-action', function() {
+  forms.active = true
+  $('#aside').addClass('aside--active')
+  const type = $(this).attr('data-type')
+  const idx = $(this).closest('.table__row').attr('data-parent')
+  let config
 
-// $('body').on('click', '.js-action', function() {
-//   $('#aside').addClass('aside--active')
-// })
-//
-// $('#aside .button').on('click', function() {
-//   $('#aside').toggleClass('aside--active')
-// })
+  if (type === ACTIONS.ADD) {
+    config = {
+      id: '',
+      title: "Add",
+      fields: {
+        login: {
+          value: "",
+          type: 'text',
+          placeholder: "Login *"
+        },
+        password: {
+          value: "",
+          type: 'password',
+          placeholder: "Password *"
+        },
+        confirm_password: {
+          value: "",
+          type: 'password',
+          placeholder: "Confirm Password *"
+        },
+        full_name: {
+          value: "",
+          type: 'text',
+          placeholder: "Full name"
+        },
+        email: {
+          value: "",
+          type: 'email',
+          placeholder: "Email"
+        },
+        description: {
+          value: "",
+          type: 'textarea',
+          placeholder: "Description"
+        },
+        country: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.country,
+          placeholder: "Country"
+        },
+        active_currency: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.currency,
+          placeholder: "Active Currency"
+        },
+        children_creation_allowed: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.choice,
+          placeholder: "Children Creation Allowed"
+        },
+        web_players_allowed: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.choice,
+          placeholder: "Web Players Allowed"
+        },
+        pending_commission: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.choice,
+          placeholder: "Record pending commission onto wallet"
+        },
+        max_child_agents: {
+          value: "",
+          type: 'number',
+          placeholder: "Max child agents"
+        },
+        max_child_shops: {
+          value: "",
+          type: 'number',
+          placeholder: "Max web shops"
+        },
+        max_child_players: {
+          value: "",
+          type: 'number',
+          placeholder: "Max web players"
+        },
+        web_player_url: {
+          value: "",
+          type: 'number',
+          placeholder: "Web player URL"
+        },
+        actions: {
+          type: 'button',
+          class: 'primary',
+          options: [
+            {
+              type: 'button',
+              class: 'primary',
+              placeholder: "Create",
+            },
+            {
+              type: 'reset',
+              class: 'default',
+              placeholder: "Cancel",
+            }
+          ]
+        },
 
-$('.js-field-eye').on('click', function() {
+      }
+    }
+  }
+  else if(type === ACTIONS.EDIT) {
+    const data = table.data.data[idx]
+    config = {
+      id: data.id,
+      title: "Edit",
+      fields: {
+        login: {
+          value: data.login,
+          type: 'text',
+          placeholder: "Login *"
+        },
+        password: {
+          value: "",
+          type: 'password',
+          placeholder: "Password *"
+        },
+        confirm_password: {
+          value: "",
+          type: 'password',
+          placeholder: "Confirm Password *"
+        },
+        full_name: {
+          value: data.full_name,
+          type: 'text',
+          placeholder: "Full name"
+        },
+        email: {
+          value: "",
+          type: 'email',
+          placeholder: "Email"
+        },
+        description: {
+          value: "",
+          type: 'textarea',
+          placeholder: "Description"
+        },
+        country: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.country,
+          placeholder: "Country"
+        },
+        active_currency: {
+          value: data.currency,
+          type: 'select',
+          options: SETTINGS.currency,
+          placeholder: "Active Currency"
+        },
+        children_creation_allowed: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.choice,
+          placeholder: "Children Creation Allowed"
+        },
+        web_players_allowed: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.choice,
+          placeholder: "Web Players Allowed"
+        },
+        pending_commission: {
+          value: "",
+          type: 'select',
+          options: SETTINGS.choice,
+          placeholder: "Record pending commission onto wallet"
+        },
+        max_child_agents: {
+          value: "",
+          type: 'number',
+          placeholder: "Max child agents"
+        },
+        max_child_shops: {
+          value: "",
+          type: 'number',
+          placeholder: "Max web shops"
+        },
+        max_child_players: {
+          value: "",
+          type: 'number',
+          placeholder: "Max web players"
+        },
+        web_player_url: {
+          value: "",
+          type: 'number',
+          placeholder: "Web player URL"
+        },
+        actions: {
+          type: 'button',
+          class: 'primary',
+          options: [
+            {
+              type: 'button',
+              class: 'primary',
+              placeholder: "Create",
+            },
+            {
+              type: 'reset',
+              class: 'default',
+              placeholder: "Cancel",
+            }
+          ]
+        },
+
+      }
+    }
+  }
+  else if(type === ACTIONS.PASSWORD) {
+    const data = table.data.data[idx]
+    config = {
+      id: data.id,
+      title: "Change the password",
+      fields: {
+        login: {
+          value: data.login || '',
+          type: 'text',
+          placeholder: "Login *"
+        },
+        password: {
+          value: "",
+          type: 'password',
+          placeholder: "Password *"
+        },
+        confirm_password: {
+          value: "",
+          type: 'password',
+          placeholder: "Confirm Password *"
+        },
+        actions: {
+          type: 'button',
+          class: 'primary',
+          options: [
+            {
+              type: 'button',
+              class: 'primary',
+              placeholder: "Change",
+            },
+            {
+              type: 'reset',
+              class: 'default',
+              placeholder: "Cancel",
+            }
+          ]
+        }
+      }
+    }
+  }
+  else if(type === ACTIONS.TRANSFER) {
+    const data = table.data.data[idx]
+    config = {
+      id: data.id,
+      title: "Transfer agent",
+      fields: {
+        agent: {
+          value: data.login || '',
+          type: 'text',
+          placeholder: "Login *",
+        },
+        new_parent: {
+          value: "",
+          type: 'text',
+          placeholder: "New parent *"
+        },
+        actions: {
+          type: 'button',
+          class: 'primary',
+          options: [
+            {
+              type: 'button',
+              class: 'primary',
+              placeholder: "Change",
+            },
+            {
+              type: 'reset',
+              class: 'default',
+              placeholder: "Cancel",
+            }
+          ]
+        }
+      }
+    }
+  }
+
+  forms.setHTML(config)
+})
+
+
+$('body').on('click', function(e) {
+  if (!$('.js-action').is(e.target) && $('.js-action').has(e.target).length === 0) {
+    const $targetElement = $('#aside')
+    if (!$targetElement.is(e.target) && $targetElement.has(e.target).length === 0) {
+      $('#aside').removeClass('aside--active')
+    }
+  }
+})
+
+$('body').on('click', '.js-field-eye', function() {
   const $field = $(this).closest('.js-field')
   $field.toggleClass('field--show')
 
@@ -298,7 +588,7 @@ $('.js-field-eye').on('click', function() {
   }
 })
 
-$('.js-dropdown-selected').on('click', function() {
+$('body').on('click', '.js-dropdown-selected', function() {
   const $parent = $(this).closest('.js-dropdown')
   $parent.find('.js-dropdown-list').slideToggle(200, "linear", function() {
     $parent.toggleClass('dropdown--active')

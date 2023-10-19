@@ -17,6 +17,19 @@
     gap: rem(20px);
   }
 
+  &__row {
+    display: grid;
+    column-gap: rem(16px);
+
+    &--2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
   &--wide {
     max-width: 100%;
   }

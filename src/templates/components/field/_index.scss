@@ -52,6 +52,7 @@
     @include make-spacer(px, 4px);
     @include transition;
 
+    pointer-events: none;
     position: absolute;
     top: rem(16px);
     left: rem(16px);

@@ -28,6 +28,7 @@
   &__label {
     @include make-spacer(px, 4px);
 
+    pointer-events: none;
     position: absolute;
     top: rem(-7px);
     left: rem(16px);

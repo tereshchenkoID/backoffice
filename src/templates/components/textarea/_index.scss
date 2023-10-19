@@ -1,20 +1,75 @@
 @use 'src/scss/config' as *;
 
 .textarea {
-  @include make-spacer(p, 20px);
-  @include transition(all);
+  @include size(100%, auto);
 
-  border-radius: var(--border-radius);
-  background-color: var(--color-cod-gray);
-  border: rem(1px) solid var(--color-border);
-  resize: vertical;
-  min-height: rem(120px);
-  width: 100%;
-  color: var(--color-text);
+  position: relative;
 
-  &:focus {
-    outline: 0;
-    border-color: var(--color-primary);
-    background-color: var(--color-mine-shaft);
+  &:not(.textarea--fixed) :is(textarea:focus, textarea:valid) {
+
+    ~ label {
+      transform: translateY(rem(-23px));
+      font-size: rem(12px);
+    }
+  }
+
+  &__input {
+    @include make-spacer(p, 16px);
+    @include size(100%);
+
+    border-radius: var(--default-border-radius);
+    border: rem(1px) solid var(--color-border);
+    overflow: hidden;
+    font-weight: var(--typography-thin);
+    resize: none;
+    min-height: rem(80px);
+
+    &:focus {
+      outline: 0;
+      border-color: var(--color-primary);
+    }
+
+    &:read-only {
+      opacity: 0.6;
+
+      ~ label {
+        transform: translateY(rem(-23px));
+        font-size: rem(12px);
+      }
+    }
+  }
+
+  &__label {
+    @include make-spacer(px, 4px);
+    @include transition;
+
+    pointer-events: none;
+    position: absolute;
+    top: rem(16px);
+    left: rem(16px);
+    background-color: var(--color-white);
+    color: rgba(0, 0, 0, 0.8)
+  }
+
+  &__eye {
+    @include absolute-center-right(0);
+    @include size(rem(56px), 100%);
+
+    opacity: 0.5;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &--fixed {
+
+    .textarea {
+
+      &__label {
+        top: rem(-7px);
+        font-size: rem(12px);
+      }
+    }
   }
 }

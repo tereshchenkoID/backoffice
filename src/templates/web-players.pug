@@ -1,0 +1,42 @@
+---
+title: Backofice
+lang: en
+---
+extends layouts/_layout
+
+block content
+  main.main
+    .paper
+      .paper__heaadline
+        h5 Web Players
+      hr.paper__hr
+      .paper__body
+        form.paper__form
+          .paper__row.paper__row--2
+            +select('Agent', [
+              {
+                value: 0,
+                text: 'Type 1'
+              },
+              {
+                value: 1,
+                text: 'Type 2'
+              },
+            ])
+            +field('Login')(type="text" required="")
+          .paper__row.paper__row--2
+            +select('Mobile phone', [
+              {
+                value: 0,
+                text: 'Type 1'
+              },
+              {
+                value: 1,
+                text: 'Type 2'
+              },
+            ])
+            +field('Numbers')(type="text" required="")
+          .paper__block.u-text-right
+            +button('Search')(type="button").button--primary
+            +button('New web player')(type="button").button--primary.u-ml-16
+            +button('Cancel')(type="reset").button--default.u-ml-16

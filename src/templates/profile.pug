@@ -1,5 +1,5 @@
 ---
-title: D-news
+title: Backofice
 lang: en
 ---
 extends layouts/_layout
@@ -11,7 +11,7 @@ block content
         h5 User Profile
       hr.paper__hr
       .paper__body
-        .paper__form
+        form.paper__form
           +field('Date', 'field--fixed')(type="date" required="true")
           +select('User type', [
             {
@@ -28,6 +28,6 @@ block content
           +field('Old Password', 'field--password')(type="password" required="true")
           +field('New Password', 'field--password')(type="password" required="true")
           +field('Confirm Password', 'field--password')(type="password" required="true")
-          .paper__block
-            +button('Save')(type="button").button--primary.u-mr-16
-            +button('Cancel')(type="button").button--default
+          .paper__block.u-text-right
+            +button('Save')(type="button").button--primary
+            +button('Cancel')(type="reset").button--default.u-ml-16
