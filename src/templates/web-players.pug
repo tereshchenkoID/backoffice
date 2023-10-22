@@ -12,31 +12,54 @@ block content
       hr.paper__hr
       .paper__body
         form.paper__form
-          .paper__row.paper__row--2
-            +select('Agent', [
-              {
-                value: 0,
-                text: 'Type 1'
-              },
-              {
-                value: 1,
-                text: 'Type 2'
-              },
-            ])
-            +field('Login')(type="text" required="")
-          .paper__row.paper__row--2
-            +select('Mobile phone', [
-              {
-                value: 0,
-                text: 'Type 1'
-              },
-              {
-                value: 1,
-                text: 'Type 2'
-              },
-            ])
-            +field('Numbers')(type="text" required="")
+          .dropdown.dropdown--lg.js-dropdown.js-select-agent
+            .dropdown__label Agent
+            .dropdown__selected(data-value='0').js-dropdown-selected
+              span All
+              .dropdown__icon.js-dropdown-icon
+            .dropdown__list.js-dropdown-list
+              a.dropdown__link.dropdown__link--active(data-value='0').js-dropdown-link All
+          +field('Login')(type="text" required="")
+          +field('Numbers')(type="text" required="")
           .paper__block.u-text-right
             +button('Search')(type="button").button--primary
             +button('New web player')(type="button").button--primary.u-ml-16
             +button('Cancel')(type="reset").button--default.u-ml-16
+
+  script(src="./js/app.js")
+  script.
+    const renderDropdownOptions = (data, $parent) => {
+      const $group = $('<div class="dropdown__group js-dropdown-group">');
+
+      data.forEach(function (item) {
+        const $option = $('<a class="dropdown__link js-dropdown-link">');
+        const $newGroup = $('<div class="dropdown__group js-dropdown-group">');
+        $option.text(item.username)
+        $option.attr('data-value', item.id)
+
+        if (item.clients && item.clients.length > 0) {
+          renderDropdownOptions(item.clients, $newGroup);
+        }
+
+        $group.append($option);
+        $group.append($newGroup);
+      });
+
+      $parent.append($group);
+    }
+
+    base.sendFormData(
+      null,
+      `${base.base}tree/`,
+      'GET',
+      (response) => {
+        if (response) {
+          const $select = $('.js-select-agent .js-dropdown-list')
+          renderDropdownOptions(response, $select, 0);
+        }
+      }, function (xhr, status, error) {
+        console.error(error);
+      },
+      {
+        async: false
+      })

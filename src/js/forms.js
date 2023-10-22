@@ -6,7 +6,7 @@ Forms.prototype.html = function(key, data) {
   if (data.type === 'text' || data.type === 'password' || data.type === 'email' || data.type === 'number') {
     let html = ''
     html+= `<div class="field js-field">
-                <input class="field__input js-field-input" type="${data.type}" name="${key}" value="${data.value}" required="">
+                <input class="field__input js-field-input" type="${data.type}" name="${key}" autocomplete="${key}" value="${data.value || ''}" required="">
                 <label class="field__label js-field-label">${data.placeholder}</label>`
 
                 if(data.type === 'password') {
@@ -20,7 +20,9 @@ Forms.prototype.html = function(key, data) {
   if (data.type === 'select') {
     let html = ''
     html +=  `<div class="select js-select">
-                <select class="select__input js-select-input" name="${key}" required="">`
+                <label class="select__label js-select-label">${data.placeholder}</label>
+                <select class="select__input js-select-input" name="${key}">
+                  <option value="-1"></option>`
 
                   data.options.forEach(item => {
                     if (data.value === item.text) {
@@ -30,9 +32,7 @@ Forms.prototype.html = function(key, data) {
                       html += `<option value="${item.value}">${item.text}</option>`
                     }
                   })
-
     html +=  `  </select>
-                <label class="select__label">${data.placeholder}</label>
              </div>`
 
     return html
@@ -40,7 +40,7 @@ Forms.prototype.html = function(key, data) {
 
   if (data.type === 'textarea') {
     return `<div class="textarea js-textarea">
-                <textarea class="textarea__input js-textarea-input" name="${key}" required="">${data.value}</textarea>
+                <textarea class="textarea__input js-textarea-input" name="${key}" autocomplete="${key}" required="">${data.value || ''}</textarea>
                 <label class="textarea__label js-textarea-label">${data.placeholder}</label>
             </div>`
   }

@@ -5,32 +5,32 @@
   font-size: rem(14px);
   min-width: rem(80px);
 
+  &__label {
+    @include make-spacer(px, 4px);
+
+    pointer-events: none;
+    position: absolute;
+    top: rem(-8px);
+    left: rem(16px);
+    background-color: var(--color-white);
+    z-index: 1;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: rem(12px);
+  }
+
   &__selected {
     @include flex(space-between, center);
     @include size(100%, rem(40px));
     @include make-spacer(pl, 16px);
-    @include make-spacer(pr, 12px);
 
     gap: rem(5px);
     position: relative;
     font-weight: var(--typography-thin);
     border-radius: var(--default-border-radius);
-    border: rem(1px) solid currentColor;
+    border: rem(1px) solid var(--color-border);
     overflow: hidden;
     min-width: rem(60px);
     cursor: pointer;
-
-    &::before {
-      @include size(rem(1px), rem(24px));
-
-      position: absolute;
-      top: 50%;
-      right: rem(32px);
-      transform: translateY(-50%);
-      background-color: currentColor;
-      opacity: 0.5;
-      content: '';
-    }
 
     span {
       pointer-events: none;
@@ -40,13 +40,15 @@
   &__list {
     display: none;
     position: absolute;
-    top: calc(100% + rem(12px));
+    top: calc(100% - 1px);
     left: 0;
     right: 0;
     background-color: var(--color-white);
-    box-shadow: var(--default-box-shadow);
-    border-radius: var(--default-border-radius);
+    border-radius: 0 0 var(--default-border-radius) var(--default-border-radius);
+    border: rem(1px) solid var(--color-border);
     z-index: $z-index-11;
+    max-height: rem(300px);
+    overflow-y: auto;
   }
 
   &__link {
@@ -57,26 +59,73 @@
     min-height: rem(36px);
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: var(--color-primary);
+      color: var(--color-white);
     }
 
     &--active {
-      display: none;
+      background-color: var(--color-border);
+    }
+  }
+
+  &__group {
+
+    .dropdown {
+
+      &__group {
+        @include make-spacer(px, 5px);
+      }
     }
   }
 
   &__icon {
-    @include transition(transform, 0.3s);
+    @include flex(center, center);
+    @include size(rem(56px), 100%);
+    @include transition;
 
-    pointer-events: none;
+    &::after {
+      @include size(rem(24px));
+      @include transition;
+
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800px' height='800px' viewBox='-8.5 0 32 32' version='1.1'%3E%3Ctitle%3Eangle-down%3C/title%3E%3Cpath d='M7.28 20.040c-0.24 0-0.44-0.080-0.6-0.24l-6.44-6.44c-0.32-0.32-0.32-0.84 0-1.2 0.32-0.32 0.84-0.32 1.2 0l5.84 5.84 5.84-5.84c0.32-0.32 0.84-0.32 1.2 0 0.32 0.32 0.32 0.84 0 1.2l-6.44 6.44c-0.16 0.16-0.4 0.24-0.6 0.24z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-size: rem(24px);
+      content: '';
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &--lg {
+
+    .dropdown {
+
+      &__selected {
+        height: rem(56px);
+      }
+    }
   }
 
   &--active {
 
     .dropdown {
 
+      &__list {
+        display: block;
+      }
+
       &__icon {
-        transform: rotateZ(180deg);
+
+        &::after {
+          transform: rotateZ(180deg);
+        }
+      }
+
+      &__selected {
+        border-radius: var(--default-border-radius) var(--default-border-radius) 0 0;
       }
     }
   }
@@ -86,7 +135,16 @@
     .dropdown {
 
       &__selected {
+        border-color: var(--color-white);
         color: var(--color-white);
+      }
+
+      &__icon {
+        background-color: unset;
+
+        &::after {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' width='800px' height='800px' viewBox='-8.5 0 32 32' version='1.1'%3E%3Ctitle%3Eangle-down%3C/title%3E%3Cpath d='M7.28 20.040c-0.24 0-0.44-0.080-0.6-0.24l-6.44-6.44c-0.32-0.32-0.32-0.84 0-1.2 0.32-0.32 0.84-0.32 1.2 0l5.84 5.84 5.84-5.84c0.32-0.32 0.84-0.32 1.2 0 0.32 0.32 0.32 0.84 0 1.2l-6.44 6.44c-0.16 0.16-0.4 0.24-0.6 0.24z'/%3E%3C/svg%3E");
+        }
       }
     }
   }

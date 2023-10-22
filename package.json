@@ -79,12 +79,7 @@
   "dependencies": {
     "@barba/core": "^2.3.10",
     "@barba/router": "^2.1.4",
-    "gsap": "^3.5.1",
     "jquery": "^3.4.1",
-    "jquery.photoswipe": "^1.1.1",
-    "slick-carousel": "^1.8.1",
-    "slick-slider": "^1.8.2",
-    "swiper": "^9.4.1",
-    "theia-sticky-sidebar": "^1.7.0"
+    "select2": "^4.1.0-rc.0"
   }
 }

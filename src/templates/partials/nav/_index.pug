@@ -81,11 +81,16 @@ mixin nav
       ul.hav__list
         each item in menu
           li.nav__item
-            a(href=item.src?`${item.src}`:'#').nav__link.js-nav-link
-              i.fa(class=item.icon).nav__icon
-              span(data-lang=`${item.text}`)
-              if item.list.length !== 0
-                i.fa.fa-angle-down.nav__arrow
-            .submenu.js-submenu
-              each link in item.list
-                a(href=link.link data-lang=`${link.text}`).submenu__item
+            if item.src
+              a(href=item.src).nav__link.js-nav-link
+                i.fa(class=item.icon).nav__icon
+                span(data-lang=`${item.text}`)
+            else
+              a.nav__link.js-nav-link
+                i.fa(class=item.icon).nav__icon
+                span(data-lang=`${item.text}`)
+                if item.list.length !== 0
+                  i.fa.fa-angle-down.nav__arrow
+              .submenu.js-submenu
+                each link in item.list
+                  a(href=link.link data-lang=`${link.text}`).submenu__item

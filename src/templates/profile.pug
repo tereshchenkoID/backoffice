@@ -12,7 +12,7 @@ block content
       hr.paper__hr
       .paper__body
         form.paper__form
-          +field('Date', 'field--fixed')(type="date" required="true")
+          +field('Id')(type="text" value='1316' readonly='true')
           +select('User type', [
             {
               value: 0,
@@ -23,7 +23,6 @@ block content
               text: 'Type 2'
             },
           ])
-          +field('Id')(type="text" value='1316' readonly='true')
           +field('Username or email')(type="text" value='manager' readonly='true')
           +field('Old Password', 'field--password')(type="password" required="true")
           +field('New Password', 'field--password')(type="password" required="true")
@@ -31,3 +30,5 @@ block content
           .paper__block.u-text-right
             +button('Save')(type="button").button--primary
             +button('Cancel')(type="reset").button--default.u-ml-16
+
+  script(src="./js/app.js")

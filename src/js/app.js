@@ -33,9 +33,10 @@ Base.prototype.sendFormData = function(formData, url, type, successCallback, err
 }
 
 Base.prototype.updateLanguage = function() {
-  $(`.js-dropdown-link[data-value="${this.language}"]`).addClass('dropdown__link--active')
-  $('.js-dropdown-selected span').text(this.language.toUpperCase())
-  $('.js-dropdown-selected').attr('data-value', this.language)
+  const $parent = $('.js-select-language')
+  $parent.find(`.js-dropdown-link[data-value="${this.language}"]`).addClass('dropdown__link--active')
+  $parent.find('.js-dropdown-selected span').text(this.language.toUpperCase())
+  $parent.find('.js-dropdown-selected').attr('data-value', this.language)
 
   this.sendFormData(
     null,
@@ -61,10 +62,9 @@ Base.prototype.updateLanguage = function() {
 
 const base = new Base()
 base.updateLanguage()
+setInterval(base.updateDateTime, 1000);
 
 const forms = new Forms()
-// forms.init()
-
 
 function Table() {
   this.data     = []
@@ -159,7 +159,7 @@ Table.prototype.drawData = function() {
     html += `</div>`
 
             if(item.shops && item.shops !== '0') {
-                html += `<div class="table__row" data-parent="${index}" data-id="${item.id}" style="pointer-events: none; opacity: 0.3">
+                html += `<div class="table__row" data-parent="${index}" data-id="${item.id}">
                             <div class="table__cell">
                               <button class="table__button js-table-button-shops" title="Shops">
                                 <span class="action">
@@ -202,15 +202,7 @@ Table.prototype.getData = function(el, id = 0) {
     (response) => {
       if (response) {
         self.data = response
-
         $('.js-table-accounts').find('.table__wrapper').html(self.drawData())
-
-        // if (inner){
-        //   $(self.drawData()).insertAfter(el)
-        // }
-        // else{
-        //   el.append(self.drawData())
-        // }
       }
     }, function (xhr, status, error) {
       console.error(error);
@@ -221,27 +213,14 @@ Table.prototype.getData = function(el, id = 0) {
 }
 
 const table = new Table()
-table.setKeys($('.js-table-accounts'))
-table.getData($('.js-table-accounts'))
+
+window.base = base
+window.forms = forms
+window.table = table
+window.ACTIONS = ACTIONS
+window.SETTINGS = SETTINGS
 
 
-setInterval(base.updateDateTime, 1000);
-
-$('body').on('click', '.js-table-button-subclients', function() {
-  const $row = $(this).closest('.table__row')
-  table.getData($('.js-table-accounts'), $row.attr('data-id'))
-
-  if (table.navbar.length === 0) {
-    table.navbar.push({
-      id: 0,
-      login: "Main"
-    })
-  }
-
-
-  table.navbar.push(table.data.data[$row.attr('data-parent')])
-  table.updateNavbar()
-})
 
 $('body').on('click', '.js-show-more', function() {
   const $list = $(this).prev('.js-table-list')
@@ -269,304 +248,6 @@ $('body').on('click', '.js-navbar-link', function() {
   table.updateNavbar()
 })
 
-$('body').on('click', '.js-action', function() {
-  forms.active = true
-  $('#aside').addClass('aside--active')
-  const type = $(this).attr('data-type')
-  const idx = $(this).closest('.table__row').attr('data-parent')
-  let config
-
-  if (type === ACTIONS.ADD) {
-    config = {
-      id: '',
-      title: "Add",
-      fields: {
-        login: {
-          value: "",
-          type: 'text',
-          placeholder: "Login *"
-        },
-        password: {
-          value: "",
-          type: 'password',
-          placeholder: "Password *"
-        },
-        confirm_password: {
-          value: "",
-          type: 'password',
-          placeholder: "Confirm Password *"
-        },
-        full_name: {
-          value: "",
-          type: 'text',
-          placeholder: "Full name"
-        },
-        email: {
-          value: "",
-          type: 'email',
-          placeholder: "Email"
-        },
-        description: {
-          value: "",
-          type: 'textarea',
-          placeholder: "Description"
-        },
-        country: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.country,
-          placeholder: "Country"
-        },
-        active_currency: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.currency,
-          placeholder: "Active Currency"
-        },
-        children_creation_allowed: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.choice,
-          placeholder: "Children Creation Allowed"
-        },
-        web_players_allowed: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.choice,
-          placeholder: "Web Players Allowed"
-        },
-        pending_commission: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.choice,
-          placeholder: "Record pending commission onto wallet"
-        },
-        max_child_agents: {
-          value: "",
-          type: 'number',
-          placeholder: "Max child agents"
-        },
-        max_child_shops: {
-          value: "",
-          type: 'number',
-          placeholder: "Max web shops"
-        },
-        max_child_players: {
-          value: "",
-          type: 'number',
-          placeholder: "Max web players"
-        },
-        web_player_url: {
-          value: "",
-          type: 'number',
-          placeholder: "Web player URL"
-        },
-        actions: {
-          type: 'button',
-          class: 'primary',
-          options: [
-            {
-              type: 'button',
-              class: 'primary',
-              placeholder: "Create",
-            },
-            {
-              type: 'reset',
-              class: 'default',
-              placeholder: "Cancel",
-            }
-          ]
-        },
-
-      }
-    }
-  }
-  else if(type === ACTIONS.EDIT) {
-    const data = table.data.data[idx]
-    config = {
-      id: data.id,
-      title: "Edit",
-      fields: {
-        login: {
-          value: data.login,
-          type: 'text',
-          placeholder: "Login *"
-        },
-        password: {
-          value: "",
-          type: 'password',
-          placeholder: "Password *"
-        },
-        confirm_password: {
-          value: "",
-          type: 'password',
-          placeholder: "Confirm Password *"
-        },
-        full_name: {
-          value: data.full_name,
-          type: 'text',
-          placeholder: "Full name"
-        },
-        email: {
-          value: "",
-          type: 'email',
-          placeholder: "Email"
-        },
-        description: {
-          value: "",
-          type: 'textarea',
-          placeholder: "Description"
-        },
-        country: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.country,
-          placeholder: "Country"
-        },
-        active_currency: {
-          value: data.currency,
-          type: 'select',
-          options: SETTINGS.currency,
-          placeholder: "Active Currency"
-        },
-        children_creation_allowed: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.choice,
-          placeholder: "Children Creation Allowed"
-        },
-        web_players_allowed: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.choice,
-          placeholder: "Web Players Allowed"
-        },
-        pending_commission: {
-          value: "",
-          type: 'select',
-          options: SETTINGS.choice,
-          placeholder: "Record pending commission onto wallet"
-        },
-        max_child_agents: {
-          value: "",
-          type: 'number',
-          placeholder: "Max child agents"
-        },
-        max_child_shops: {
-          value: "",
-          type: 'number',
-          placeholder: "Max web shops"
-        },
-        max_child_players: {
-          value: "",
-          type: 'number',
-          placeholder: "Max web players"
-        },
-        web_player_url: {
-          value: "",
-          type: 'number',
-          placeholder: "Web player URL"
-        },
-        actions: {
-          type: 'button',
-          class: 'primary',
-          options: [
-            {
-              type: 'button',
-              class: 'primary',
-              placeholder: "Create",
-            },
-            {
-              type: 'reset',
-              class: 'default',
-              placeholder: "Cancel",
-            }
-          ]
-        },
-
-      }
-    }
-  }
-  else if(type === ACTIONS.PASSWORD) {
-    const data = table.data.data[idx]
-    config = {
-      id: data.id,
-      title: "Change the password",
-      fields: {
-        login: {
-          value: data.login || '',
-          type: 'text',
-          placeholder: "Login *"
-        },
-        password: {
-          value: "",
-          type: 'password',
-          placeholder: "Password *"
-        },
-        confirm_password: {
-          value: "",
-          type: 'password',
-          placeholder: "Confirm Password *"
-        },
-        actions: {
-          type: 'button',
-          class: 'primary',
-          options: [
-            {
-              type: 'button',
-              class: 'primary',
-              placeholder: "Change",
-            },
-            {
-              type: 'reset',
-              class: 'default',
-              placeholder: "Cancel",
-            }
-          ]
-        }
-      }
-    }
-  }
-  else if(type === ACTIONS.TRANSFER) {
-    const data = table.data.data[idx]
-    config = {
-      id: data.id,
-      title: "Transfer agent",
-      fields: {
-        agent: {
-          value: data.login || '',
-          type: 'text',
-          placeholder: "Login *",
-        },
-        new_parent: {
-          value: "",
-          type: 'text',
-          placeholder: "New parent *"
-        },
-        actions: {
-          type: 'button',
-          class: 'primary',
-          options: [
-            {
-              type: 'button',
-              class: 'primary',
-              placeholder: "Change",
-            },
-            {
-              type: 'reset',
-              class: 'default',
-              placeholder: "Cancel",
-            }
-          ]
-        }
-      }
-    }
-  }
-
-  forms.setHTML(config)
-})
-
-
 $('body').on('click', function(e) {
   if (!$('.js-action').is(e.target) && $('.js-action').has(e.target).length === 0) {
     const $targetElement = $('#aside')
@@ -590,12 +271,15 @@ $('body').on('click', '.js-field-eye', function() {
 
 $('body').on('click', '.js-dropdown-selected', function() {
   const $parent = $(this).closest('.js-dropdown')
-  $parent.find('.js-dropdown-list').slideToggle(200, "linear", function() {
-    $parent.toggleClass('dropdown--active')
-  })
+
+  $parent.toggleClass('dropdown--active')
+  // $parent.find('.js-dropdown-list').slideToggle(200, "linear", function() {
+  //   $parent.toggleClass('dropdown--active')
+  // })
 })
 
-$('.js-dropdown-link').on('click', function() {
+
+$('body').on('click', '.js-dropdown-link', function() {
   const $parent = $(this).closest('.js-dropdown')
   const $selected = $parent.find('.js-dropdown-selected')
   $parent.find('.dropdown__link--active').removeClass('dropdown__link--active')
@@ -603,14 +287,17 @@ $('.js-dropdown-link').on('click', function() {
 
   $parent.attr('data-value', $(this).attr('data-value'))
   $selected.find('span').html($(this).html())
+  $parent.toggleClass('dropdown--active')
 
-  $parent.find('.js-dropdown-list').slideUp(200, "linear", function() {
-    $parent.removeClass('dropdown--active')
-  })
+  // $parent.find('.js-dropdown-list').slideUp(200, "linear", function() {
+  //   $parent.removeClass('dropdown--active')
+  // })
 
-  localStorage.setItem('lang', $(this).attr('data-value'))
-  base.language = $(this).attr('data-value')
-  base.updateLanguage()
+  if ($parent.hasClass('js-select-language')) {
+    localStorage.setItem('lang', $(this).attr('data-value'))
+    base.language = $(this).attr('data-value')
+    base.updateLanguage()
+  }
 })
 
 $('.js-nav-link').on('click', function() {
@@ -624,3 +311,12 @@ $('.js-account-icon').on('click', function() {
   $(this).next('.js-account-dropdown').slideToggle(200, "linear")
 })
 
+
+$(document).ready(function() {
+  $('.js-select-input').select2({
+    placeholder: {
+      id: '-1',
+      text: 'Select values'
+    }
+  });
+});

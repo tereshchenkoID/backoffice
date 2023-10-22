@@ -1,6 +1,7 @@
 mixin select(placeholder, options)
   .select.js-select
+    label.select__label.js-select-label= placeholder
     select&attributes(attributes).select__input.js-select-input
+      option(value="-1")
       each item in options
         option(value=item.value)= item.text
-    label.select__label= placeholder

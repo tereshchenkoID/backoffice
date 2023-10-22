@@ -13,24 +13,50 @@ block content
       .paper__body
         form.paper__form
           .paper__row.paper__row--2
-            +select('Agent', [
-              {
-                value: 0,
-                text: 'Type 1'
-              },
-              {
-                value: 1,
-                text: 'Type 2'
-              },
-            ])
+            .dropdown.dropdown--lg.js-dropdown.js-select-agent
+              .dropdown__label Agent
+              .dropdown__selected(data-value='0').js-dropdown-selected
+                span All
+                .dropdown__icon.js-dropdown-icon
+              .dropdown__list.js-dropdown-list
+                a.dropdown__link.dropdown__link--active(data-value='0').js-dropdown-link All
+
             +select('Type', [
               {
                 value: 0,
-                text: 'Type 1'
+                text: 'Selected'
               },
               {
                 value: 1,
-                text: 'Type 2'
+                text: 'To agent'
+              },
+              {
+                value: 2,
+                text: 'From agent'
+              },
+              {
+                value: 3,
+                text: 'To shop'
+              },
+              {
+                value: 4,
+                text: 'From shop'
+              },
+              {
+                value: 5,
+                text: 'Commission to agent'
+              },
+              {
+                value: 6,
+                text: 'Commission to shop'
+              },
+              {
+                value: 7,
+                text: 'Cash-in'
+              },
+              {
+                value: 8,
+                text: 'Cash-out'
               },
             ])
           +field('Target')(type="text" required="")
@@ -53,3 +79,41 @@ block content
           .paper__block.u-text-right
             +button('Save')(type="button").button--primary
             +button('Cancel')(type="reset").button--default.u-ml-16
+
+  script(src="./js/app.js")
+  script.
+    const renderDropdownOptions = (data, $parent) => {
+      const $group = $('<div class="dropdown__group js-dropdown-group">');
+
+      data.forEach(function (item) {
+        const $option = $('<a class="dropdown__link js-dropdown-link">');
+        const $newGroup = $('<div class="dropdown__group js-dropdown-group">');
+        $option.text(item.username)
+        $option.attr('data-value', item.id)
+
+        if (item.clients && item.clients.length > 0) {
+          renderDropdownOptions(item.clients, $newGroup);
+        }
+
+        $group.append($option);
+        $group.append($newGroup);
+      });
+
+      $parent.append($group);
+    }
+
+    base.sendFormData(
+      null,
+      `${base.base}tree/`,
+      'GET',
+      (response) => {
+        if (response) {
+          const $select = $('.js-select-agent .js-dropdown-list')
+          renderDropdownOptions(response, $select, 0);
+        }
+      }, function (xhr, status, error) {
+        console.error(error);
+      },
+      {
+        async: false
+      })

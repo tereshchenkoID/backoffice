@@ -13,7 +13,7 @@ body {
   min-height: 100vh;
   overflow-y: auto;
   line-height: var(--line-height);
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--color-text);
   font-family: var(--font-family);
   font-size: var(--font-size);
   font-weight: var(--typography-thin);
@@ -84,6 +84,7 @@ hr {
 
   position: relative;
   overflow-x: auto;
+  min-height: calc(100vh - rem(64px));
 }
 
 .action {
@@ -219,4 +220,3 @@ hr {
     }
   }
 }
-
