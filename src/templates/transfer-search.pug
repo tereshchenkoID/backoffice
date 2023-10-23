@@ -11,7 +11,7 @@ block content
         h5 Transfer search
       hr.paper__hr
       .paper__body
-        form.paper__form
+        form.paper__form.js-form-transfer-search
           .paper__row.paper__row--2
             .dropdown.dropdown--lg.js-dropdown.js-select-agent
               .dropdown__label Agent
@@ -58,30 +58,23 @@ block content
                 value: 8,
                 text: 'Cash-out'
               },
-            ])
-          +field('Target')(type="text" required="")
+            ])(name="type")
+          +field('Target')(type="text" required name="target")
           .paper__row.paper__row--2
-            +field('Date from', 'field--fixed')(type="date" required="")
-            +field('Date to', 'field--fixed')(type="date" required="")
+            +field('Date from')(type="date" name="date-from")
+            +field('Date to')(type="date" name="date-to")
           .paper__row.paper__row--3
-            +select('Currency', [
-              {
-                value: 0,
-                text: 'Type 1'
-              },
-              {
-                value: 1,
-                text: 'Type 2'
-              },
-            ])
-            +field('Amount from')(type="number" required="")
-            +field('Amount to')(type="number" required="")
+            +select('Currency', [])(name="currency").js-select-currency
+            +field('Amount from')(type="number" name="amount-from")
+            +field('Amount to')(type="number" name="amount-to")
           .paper__block.u-text-right
-            +button('Save')(type="button").button--primary
+            +button('Save')(type="submit").button--primary
             +button('Cancel')(type="reset").button--default.u-ml-16
 
   script(src="./js/app.js")
   script.
+    $('.js-loader').addClass('loader--active')
+
     const renderDropdownOptions = (data, $parent) => {
       const $group = $('<div class="dropdown__group js-dropdown-group">');
 
@@ -117,3 +110,48 @@ block content
       {
         async: false
       })
+
+    base.sendFormData(
+      null,
+      `${base.base}currencies/`,
+      'GET',
+      (response) => {
+        if (response) {
+          response.data.forEach(function (item, index) {
+            const $option = $('<option>', {
+              text: item,
+              value: item
+            })
+
+            $option.appendTo($('.js-select-currency'))
+
+            $('.js-loader').removeClass('loader--active')
+          })
+        }
+      }, function (xhr, status, error) {
+        console.error(error);
+      },
+      {
+        async: false
+      })
+
+    $('.js-form-transfer-search').on('submit', function(e) {
+      e.preventDefault()
+      const formData = new FormData(e.target);
+      formData.append('agent', $('.js-select-agent .js-dropdown-selected').attr('data-value'))
+
+      base.sendFormData(
+        formData,
+        `${base.base}/../`,
+        'POST',
+        (response) => {
+          if (response) {
+            console.log(response)
+          }
+        }, function (xhr, status, error) {
+          console.error(error);
+        },
+        {
+          async: false
+        })
+    })

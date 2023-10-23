@@ -1,0 +1,274 @@
+---
+title: Backofice
+lang: en
+---
+extends layouts/_layout
+
+block content
+  main.main
+    .paper.paper--wide.u-mb-24
+      .paper__heaadline
+        h5 Tickets search
+        +select('Rows', [
+          {
+            value: 20,
+            text: '20',
+            selected: true,
+          },
+          {
+            value: 50,
+            text: '50'
+          },
+          {
+            value: 100,
+            text: '100'
+          }
+        ])(name="quantity")
+
+      hr.paper__hr
+      .paper__body
+        form.paper__form.js-form-tickets
+          .paper__row.paper__row--4
+            +field('Ticket')(type="text" name="ticket")
+            +field('Username')(type="text" name="username")
+            +select('State', [
+              {
+                value: 0,
+                text: 'Any',
+                selected: true,
+              },
+              {
+                value: 1,
+                text: 'Confirmed'
+              },
+              {
+                value: 2,
+                text: 'Finalized'
+              },
+              {
+                value: 3,
+                text: 'Cancelled'
+              },
+              {
+                value: 4,
+                text: 'Unconfirmed'
+              },
+            ])(name="state")
+
+            +select('Player Type', [
+              {
+                value: 0,
+                text: 'Any',
+                selected: true,
+              },
+              {
+                value: 1,
+                text: 'Shop'
+              },
+              {
+                value: 2,
+                text: 'Web'
+              },
+            ])(name="type")
+          .paper__row.paper__row--4
+            +field('Date from')(type="datetime-local" name="date-from")
+            +field('Date to')(type="datetime-local" name="date-to")
+            +field('Amount from')(type="number" name="amount-from")
+            +field('Amount to')(type="number" name="amount-to")
+          .paper__row.paper__row--4
+            +select('Currency', [])(name="currency").js-select-currency
+            +field('Payout from')(type="number" name="payout-from")
+            +field('Payout to')(type="number" name="payout-to")
+          .paper__block.u-text-right
+            +button('Search')(type="submit").button--primary
+            +button('Cancel')(type="reset").button--default.u-ml-16
+
+    .paper.paper--wide
+      .paper__body
+        .paper__form
+          +pagination.pagination--top.js-pagination
+
+          .table.js-table-tickets
+            .table__row
+              .table__cell(data-key="[add]")
+              .table__cell(data-key="ticketId")
+                strong Ticket Number
+              .table__cell(data-key="username")
+                strong Username
+              .table__cell(data-key="game")
+                strong Game Detail
+              .table__cell(data-key="status")
+                strong Status
+              .table__cell(data-key="bookTime")
+                strong Book Time
+              .table__cell(data-key="currency")
+                strong Currency
+              .table__cell(data-key="payout")
+                strong Payout
+              .table__cell(data-key="stake")
+                strong Sum of Stakes
+            .table__wrapper
+              .table__row
+                .table__cell
+                  .u-full-width.u-text-center.u-pt-16
+                    p Sorry, no matching records found.
+
+          +pagination.pagination--bottom.js-pagination
+
+  script(src="./js/app.js")
+  script.
+    $('.js-loader').addClass('loader--active')
+
+    const setDate = (el, type) => {
+      const date = new Date();
+
+      if (type === 0) {
+        date.setHours(0, 0, 0, 0);
+      }
+
+      const year = date.getFullYear().toString().padStart(4, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+
+      el.val(`${year}-${month}-${day}T${hours}:${minutes}`)
+    }
+
+    setDate($('[name="date-from"]'), 0)
+    setDate($('[name="date-to"]'), 1)
+
+    table.navigation.quantity = Number($('[name="quantity"]').val())
+
+    const handleSubmit = (action = null) => {
+      let page = 0
+
+      $('.js-loader').addClass('loader--active')
+      const formData = new FormData();
+
+      $('.paper').find('[name]').each(function () {
+        const val = $(this).val()
+        const name = $(this).attr('name')
+
+        if (val !== '' && val !== '-1') {
+          formData.append(name, val)
+        }
+      });
+
+      if (action === 'next') {
+        page = table.navigation.current <= table.navigation.pages ? table.navigation.current + 1 : table.navigation.pages
+      }
+      else if (action === 'prev') {
+        page = table.navigation.current > 0 ? table.navigation.current - 1 : 0
+      }
+      else if (action === 'start') {
+        page = 0
+      }
+      else if (action === 'end') {
+        page = table.navigation.pages
+      }
+
+      formData.append('page', page)
+
+      base.sendFormData(
+        formData,
+        `${base.base}tickets/`,
+        'POST',
+        (response) => {
+          if (response) {
+            const el = $('.js-table-tickets')
+
+            if (table.keys.length === 0) {
+              table.setKeys(el)
+            }
+
+            if (response.data) {
+              table.navigation.all = response.results
+              table.navigation.pages = Math.floor(response.results / Number($('[name="quantity"]').val()))
+              table.navigation.current = page
+              table.updateNavigation()
+
+              el.find('.table__wrapper').html(table.drawData(response.data))
+            }
+            else {
+              table.navigation.all = 0
+              table.navigation.pages = 0
+              table.navigation.current = 0
+              table.updateNavigation()
+              $('.js-pagination-count-start').html(0)
+
+              el.find('.table__wrapper').html(
+                `<div class="table__row">
+                  <div class="table__cell">
+                    <div class="u-full-width u-text-center u-pt-16">
+                      <p>Sorry, no matching records found.</p>
+                    </div>
+                  </div>
+                </div>`
+              )
+            }
+
+            $('.js-loader').removeClass('loader--active')
+          }
+        }, function (xhr, status, error) {
+          console.error(error);
+        },
+        {
+          async: false
+        })
+    }
+
+    base.sendFormData(
+      null,
+      `${base.base}currencies/`,
+      'GET',
+      (response) => {
+        if (response) {
+          response.data.forEach(function (item, index) {
+            const $option = $('<option>', {
+              text: item,
+              value: item
+            })
+
+            $option.appendTo($('.js-select-currency'))
+
+            $('.js-loader').removeClass('loader--active')
+          })
+        }
+      }, function (xhr, status, error) {
+        console.error(error);
+      },
+      {
+        async: false
+      })
+
+    $('.js-form-tickets').on('submit', function(e) {
+      e.preventDefault()
+      handleSubmit()
+    })
+
+    $('.js-pagination-prev').on('click', function () {
+      handleSubmit('prev')
+    })
+
+    $('.js-pagination-next').on('click', function () {
+      handleSubmit('next')
+    })
+
+    $('.js-pagination-start').on('click', function () {
+      handleSubmit('start')
+    })
+
+    $('.js-pagination-end').on('click', function () {
+      handleSubmit('end')
+    })
+
+    $('[name="quantity"]').on('change', function() {
+      table.navigation.quantity = Number($(this).val())
+    })
+
+
+    $('.js-table-tickets').on('click', $('[data-cell="username"]'), function (e) {
+      console.log(e.target.hasAttribute('data-cell'))
+      $('[name="username"]').val(e.target.innerText)
+    })

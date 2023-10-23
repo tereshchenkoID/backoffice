@@ -17,6 +17,12 @@
     gap: rem(16px);
   }
 
+  &__heaadline {
+    display: grid;
+    grid-template-columns: 1fr rem(200px);
+    align-items: center;
+  }
+
   &__row {
     display: grid;
     column-gap: rem(16px);
@@ -27,6 +33,10 @@
 
     &--3 {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    &--4 {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 

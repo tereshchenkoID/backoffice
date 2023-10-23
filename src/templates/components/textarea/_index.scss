@@ -5,13 +5,13 @@
 
   position: relative;
 
-  &:not(.textarea--fixed) :is(textarea:focus, textarea:valid) {
-
-    ~ label {
-      transform: translateY(rem(-23px));
-      font-size: rem(12px);
-    }
-  }
+  //&:not(.textarea--fixed) :is(textarea:focus, textarea:valid) {
+  //
+  //  ~ label {
+  //    transform: translateY(rem(-23px));
+  //    font-size: rem(12px);
+  //  }
+  //}
 
   &__input {
     @include make-spacer(p, 16px);
@@ -32,10 +32,10 @@
     &:read-only {
       opacity: 0.6;
 
-      ~ label {
-        transform: translateY(rem(-23px));
-        font-size: rem(12px);
-      }
+      //~ label {
+      //  transform: translateY(rem(-23px));
+      //  font-size: rem(12px);
+      //}
     }
   }
 
@@ -48,7 +48,10 @@
     top: rem(16px);
     left: rem(16px);
     background-color: var(--color-white);
-    color: rgba(0, 0, 0, 0.8)
+    color: rgba(0, 0, 0, 0.8);
+
+    transform: translateY(rem(-23px));
+    font-size: rem(12px);
   }
 
   &__eye {

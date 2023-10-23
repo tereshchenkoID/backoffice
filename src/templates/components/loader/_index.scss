@@ -1,0 +1,40 @@
+@use 'src/scss/config' as *;
+
+.loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $z-index-13;
+  background-color: rgba(255, 255, 255, 0.8);
+
+  &--active {
+    @include flex(center, center);
+  }
+
+  &__item {
+    @include size(rem(50px));
+
+    position: relative;
+    border-radius: 50%;
+
+    &::before {
+      @include size(100%);
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: rem(10px) solid var(--color-primary);
+      animation: 1s infinite ease-in-out spin;
+      border-radius: inherit;
+      content: '';
+    }
+
+    @keyframes spin {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+  }
+}

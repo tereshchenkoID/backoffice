@@ -1,0 +1,17 @@
+mixin pagination
+  .pagination&attributes(attributes)
+    .pagination__counts
+      strong.js-pagination-count-start 0
+      span -
+      strong.js-pagination-count-end 0
+      span of
+      strong.js-pagination-all 0
+    .pagination__arrows
+      button.pagination__button.pagination__button--disabled.js-pagination-start
+        i.fa.fa-angle-double-left
+      button.pagination__button.pagination__button--disabled.js-pagination-prev
+        i.fa.fa-angle-left
+      button.pagination__button.pagination__button--disabled.js-pagination-next
+        i.fa.fa-angle-right
+      button.pagination__button.pagination__button--disabled.js-pagination-end
+        i.fa.fa-angle-double-right
