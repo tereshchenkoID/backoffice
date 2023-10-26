@@ -20,6 +20,14 @@
       opacity: 0.7;
     }
 
+    &--primary-alpha-05 {
+      background-color: rgba(#2B73B3, 0.5);
+    }
+
+    &--primary-alpha-01 {
+      background-color: rgba(#2B73B3, 0.1);
+    }
+
     &:last-child {
       border-bottom: 0;
     }
@@ -34,9 +42,7 @@
     //display: table-cell;
     //vertical-align: inherit;
 
-    &:last-child:not(:first-child) {
-      justify-content: flex-end;
-    }
+    //border: 1px solid red;
   }
 
   &__list {

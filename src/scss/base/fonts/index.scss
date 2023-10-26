@@ -1,18 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Roboto:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&Libre+Barcode+39&family=Roboto:wght@300;500;700&display=swap');
 
-$path: '../fonts/FontAwesome';
+$path: '../fonts';
+
+@font-face {
+  font-family: 'Barcode';
+  src: url($path + '/Code/Code.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
 @font-face {
   font-family: 'Font Awesome 5 Free';
   font-weight: 400;
   font-style: normal;
   font-display: block;
-  src: url($path + '/fa-regular-400.eot');
-  src: url($path + '/fa-regular-400.eot?#iefix') format('embedded-opentype'),
-    url($path + '/fa-regular-400.woff2') format('woff2'),
-    url($path + '/fa-regular-400.woff') format('woff'),
-    url($path + '/fa-regular-400.ttf') format('truetype'),
-    url($path + '/fa-regular-400.svg#fontawesome') format('svg');
+  src: url($path + '/FontAwesome/fa-regular-400.eot');
+  src: url($path + '/FontAwesome/fa-regular-400.eot?#iefix') format('embedded-opentype'),
+    url($path + '/FontAwesome/fa-regular-400.woff2') format('woff2'),
+    url($path + '/FontAwesome/fa-regular-400.woff') format('woff'),
+    url($path + '/FontAwesome/fa-regular-400.ttf') format('truetype'),
+    url($path + '/FontAwesome/fa-regular-400.svg#fontawesome') format('svg');
 }
 
 @font-face {
@@ -20,12 +28,12 @@ $path: '../fonts/FontAwesome';
   font-weight: 400;
   font-style: normal;
   font-display: block;
-  src: url($path + '/fa-brands-400.eot');
-  src: url($path + '/fa-brands-400.eot?#iefix') format('embedded-opentype'),
-    url($path + '/fa-brands-400.woff2') format('woff2'),
-    url($path + '/fa-brands-400.woff') format('woff'),
-    url($path + '/fa-brands-400.ttf') format('truetype'),
-    url($path + '/fa-brands-400.svg#fontawesome') format('svg');
+  src: url($path + '/FontAwesome/fa-brands-400.eot');
+  src: url($path + '/FontAwesome/fa-brands-400.eot?#iefix') format('embedded-opentype'),
+    url($path + '/FontAwesome/fa-brands-400.woff2') format('woff2'),
+    url($path + '/FontAwesome/fa-brands-400.woff') format('woff'),
+    url($path + '/FontAwesome/fa-brands-400.ttf') format('truetype'),
+    url($path + '/FontAwesome/fa-brands-400.svg#fontawesome') format('svg');
 }
 
 @font-face {
@@ -33,27 +41,25 @@ $path: '../fonts/FontAwesome';
   font-weight: 400;
   font-style: normal;
   font-display: block;
-  src: url($path + '/fa-regular-400.eot');
-  src: url($path + '/fa-regular-400.eot?#iefix') format('embedded-opentype'),
-    url($path + '/fa-regular-400.woff2') format('woff2'),
-    url($path + '/fa-regular-400.woff') format('woff'),
-    url($path + '/fa-regular-400.ttf') format('truetype'),
-    url($path + '/fa-regular-400.svg#fontawesome') format('svg');
+  src: url($path + '/FontAwesome/fa-regular-400.eot');
+  src: url($path + '/FontAwesome/fa-regular-400.eot?#iefix') format('embedded-opentype'),
+    url($path + '/FontAwesome/fa-regular-400.woff2') format('woff2'),
+    url($path + '/FontAwesome/fa-regular-400.woff') format('woff'),
+    url($path + '/FontAwesome/fa-regular-400.ttf') format('truetype'),
+    url($path + '/FontAwesome/fa-regular-400.svg#fontawesome') format('svg');
 }
-
-
 
 @font-face {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
   font-style: normal;
   font-display: block;
-  src: url($path + '/fa-solid-900.eot');
-  src: url($path + '/fa-solid-900.eot?#iefix') format('embedded-opentype'),
-    url($path + '/fa-solid-900.woff2') format('woff2'),
-    url($path + '/fa-solid-900.woff') format('woff'),
-    url($path + '/fa-solid-900.ttf') format('truetype'),
-    url($path + '/fa-solid-900.svg#fontawesome') format('svg');
+  src: url($path + '/FontAwesome/fa-solid-900.eot');
+  src: url($path + '/FontAwesome/fa-solid-900.eot?#iefix') format('embedded-opentype'),
+    url($path + '/FontAwesome/fa-solid-900.woff2') format('woff2'),
+    url($path + '/FontAwesome/fa-solid-900.woff') format('woff'),
+    url($path + '/FontAwesome/fa-solid-900.ttf') format('truetype'),
+    url($path + '/FontAwesome/fa-solid-900.svg#fontawesome') format('svg');
 }
 
 .fa,

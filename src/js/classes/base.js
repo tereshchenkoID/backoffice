@@ -61,3 +61,46 @@ Base.prototype.handleOutsideClick = function(element, event, callback) {
     callback();
   }
 }
+
+Base.prototype.initDynamicSelect = function(url, el, key = null) {
+  this.sendFormData(
+  null,
+  `${this.base}${url}`,
+  'GET',
+  (response) => {
+    if (response) {
+      response.data.forEach(function (item) {
+        const $option = $('<option>', {
+          text: key ? item[key] : item,
+          value: item
+        })
+
+        $option.appendTo(el)
+      })
+    }
+  }, function (xhr, status, error) {
+    console.error(error);
+  },
+  {
+    async: false
+  })
+}
+
+Base.prototype.getDate = function(date, type) {
+  const data = new Date(date)
+
+  const year = data.getFullYear().toString().padStart(4, '0')
+  const month = (data.getMonth() + 1).toString().padStart(2, '0')
+  const day = data.getDate().toString().padStart(2, '0')
+  const hours = data.getHours().toString().padStart(2, '0')
+  const minutes = data.getMinutes().toString().padStart(2, '0')
+  const seconds = data.getSeconds().toString().padStart(2, '0')
+
+  if (type === 'datetime-local') {
+    return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
+  if (type === 'time-local') {
+    return `${hours}:${minutes}:${seconds}`
+  }
+  return `${day}-${month}-${year}`
+}

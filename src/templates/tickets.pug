@@ -13,7 +13,6 @@ block content
           {
             value: 20,
             text: '20',
-            selected: true,
           },
           {
             value: 50,
@@ -27,6 +26,29 @@ block content
 
       hr.paper__hr
       .paper__body
+
+        .print-ticket#js-print-ticket
+          .print-ticket__head
+            .print-ticket__logo
+              img(src="https://api.qool90.bet/img/vb.png").img
+            .print-ticket__meta
+              .print-ticket__wrapper
+                .print-ticket__row
+                  .u-text-left Shop:
+                  strong.u-text-right.js-print-ticket-shop
+                .print-ticket__row
+                  .u-text-left Bet:
+                  strong.u-text-right.js-print-ticket-placed-date
+                .print-ticket__row
+                  .u-text-left Time:
+                  strong.u-text-right.js-print-ticket-placed-time
+          .print-ticket__body
+            .print-ticket__title.u-text-center
+              span.u-mr-8 TICKET
+              strong.js-print-ticket-id
+            .print-ticket__code.u-text-center.js-print-ticket-id
+            .js-print-ticket-wrapper
+
         form.paper__form.js-form-tickets
           .paper__row.paper__row--4
             +field('Ticket')(type="text" name="ticket")
@@ -89,25 +111,26 @@ block content
           +pagination.pagination--top.js-pagination
 
           .table.js-table-tickets
-            .table__row
-              .table__cell(data-key="[add]")
+            .table__row.js-table-row
+              .table__cell(data-key="dropdown")
               .table__cell(data-key="ticketId")
-                strong Ticket Number
+                strong Ticket ID
               .table__cell(data-key="username")
-                strong Username
+                strong Show
               .table__cell(data-key="game")
-                strong Game Detail
+                strong Game Details
               .table__cell(data-key="status")
                 strong Status
-              .table__cell(data-key="bookTime")
-                strong Book Time
               .table__cell(data-key="currency")
                 strong Currency
               .table__cell(data-key="payout")
                 strong Payout
               .table__cell(data-key="stake")
                 strong Sum of Stakes
-            .table__wrapper
+              .table__cell(data-key="bookTime")
+                strong Finalized
+              .table__cell(data-key="edit,print,calculate")
+            .table__wrapper.js-table-wrapper
               .table__row
                 .table__cell
                   .u-full-width.u-text-center.u-pt-16
@@ -116,34 +139,120 @@ block content
           +pagination.pagination--bottom.js-pagination
 
   script(src="./js/app.js")
+
   script.
+    $(document).ready(function () {
+
+      // base.sendFormData(
+      //   null,
+      //   `${base.base}tickets/details/?id=210042424519`,
+      //   'GET',
+      //   (response) => {
+      //     if (response) {
+      //       const data = response.data[0]
+      //       console.log(response.data[0])
+      //
+      //       $('.js-print-ticket-placed-date').html(base.getDate(data.placed))
+      //       $('.js-print-ticket-placed-time').html(base.getDate(data.placed, 'time-local'))
+      //
+      //       let html = ''
+      //
+      //       data.group.forEach(item => {
+      //         html += `<div class="print-ticket__block">
+      //                     <div class="print-ticket__row">
+      //                        <div class="u-text-left">GR: <strong>${item.group}</strong></div>
+      //                        <div class="u-text-right"><strong>${item.amount}</strong></div>
+      //                    </div>
+      //                    <div class="print-ticket__row">
+      //                        <div class="u-text-left">Min/Max Win:</div>
+      //                        <div class="u-text-right">
+      //                            ${data.currency} <strong>${item.minwin.toFixed(2)}</strong>
+      //                            /
+      //                            ${data.currency} <strong>${item.maxwin.toFixed(2)}</strong>
+      //                        </div>
+      //                    </div>
+      //                 </div>`
+      //       })
+      //
+      //       data.bets.forEach(item => {
+      //         console.log(item)
+      //         html += `<div class="print-ticket__block">
+      //                       <div class="print-ticket__row print-ticket__row--3">
+      //                           <div class="u-text-left"><strong>${item.details.eventId}</strong></div>
+      //                           <div class="u-text-left">${item.details.teams.away} - ${item.details.teams.home}</div>
+      //                           <div class="u-text-right"><strong>${item.amount}</strong></div>
+      //                       </div>
+      //                       <div class="print-ticket__row print-ticket__row--3">
+      //                           <div class="u-text-left">${base.getDate(item.details.start, 'time-local')}</div>
+      //                           <div class="u-text-left">${item.market} : ${item.selection}</div>
+      //                           <div class="u-text-right"><strong>${item.odds}</strong></div>
+      //                       </div>
+      //                   </div>`
+      //       })
+      //
+      //       $('.js-print-ticket-wrapper').html(html)
+      //     }
+      //   }
+      // )
+    });
+
     $('.js-loader').addClass('loader--active')
 
-    const setDate = (el, type) => {
-      const date = new Date();
+    $('[name="date-from"]').val(base.getDate(new Date().setHours(0, 0, 0, 0), 'datetime-local'))
+    $('[name="date-to"]').val(base.getDate(new Date(), 'datetime-local'))
+    $('[name="quantity"]').val(table.navigation.quantity)
 
-      if (type === 0) {
-        date.setHours(0, 0, 0, 0);
-      }
+    base.initDynamicSelect('currencies/', $('.js-select-currency'))
 
-      const year = date.getFullYear().toString().padStart(4, '0');
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
+    $('.js-loader').removeClass('loader--active')
 
-      el.val(`${year}-${month}-${day}T${hours}:${minutes}`)
+    const ticketPrint = (data, shop) => {
+      $('.js-print-ticket-placed-date').html(base.getDate(data.placed))
+      $('.js-print-ticket-placed-time').html(base.getDate(data.placed, 'time-local'))
+      $('.js-print-ticket-id').html(`#${data.id}`)
+      $('.js-print-ticket-shop').html(shop)
+
+      let html = ''
+
+      data.group.forEach(item => {
+        html += `<div class="print-ticket__block">
+                   <div class="print-ticket__row">
+                      <div class="u-text-left">GR: <strong>${item.group}</strong></div>
+                      <div class="u-text-right"><strong>${item.amount}</strong></div>
+                   </div>
+                   <div class="print-ticket__row">
+                       <div class="u-text-left">Min/Max Win:</div>
+                       <div class="u-text-right">
+                          ${data.currency} <strong>${item.minwin.toFixed(2)}</strong>
+                          /
+                          ${data.currency} <strong>${item.maxwin.toFixed(2)}</strong>
+                       </div>
+                   </div>
+                 </div>`
+      })
+
+      data.bets.forEach(item => {
+        html += `<div class="print-ticket__block">
+                   <div class="print-ticket__row print-ticket__row--3">
+                       <div class="u-text-left"><strong>${item.details.eventId}</strong></div>
+                       <div class="u-text-left">${item.details.teams.away} - ${item.details.teams.home}</div>
+                       <div class="u-text-right"><strong>${item.amount}</strong></div>
+                   </div>
+                   <div class="print-ticket__row print-ticket__row--3">
+                       <div class="u-text-left">${base.getDate(item.details.start, 'time-local')}</div>
+                       <div class="u-text-left">${item.market} : ${item.selection}</div>
+                       <div class="u-text-right"><strong>${item.odds}</strong></div>
+                   </div>
+                 </div>`
+      })
+
+      $('.js-print-ticket-wrapper').html(html)
     }
 
-    setDate($('[name="date-from"]'), 0)
-    setDate($('[name="date-to"]'), 1)
-
-    table.navigation.quantity = Number($('[name="quantity"]').val())
-
     const handleSubmit = (action = null) => {
-      let page = 0
-
       $('.js-loader').addClass('loader--active')
+
+      let page = 0
       const formData = new FormData();
 
       $('.paper').find('[name]').each(function () {
@@ -178,28 +287,28 @@ block content
           if (response) {
             const el = $('.js-table-tickets')
 
-            if (table.keys.length === 0) {
-              table.setKeys(el)
-            }
+            table.setKeys($('.js-table-tickets > .js-table-row'))
+
+            // if (table.keys.length === 0) {
+            // }
 
             if (response.data) {
               table.navigation.all = response.results
-              table.navigation.pages = Math.floor(response.results / Number($('[name="quantity"]').val()))
+              table.navigation.pages = Math.floor(response.results / table.navigation.quantity)
               table.navigation.current = page
-              table.updateNavigation()
+              table.updateNavigation(1)
 
-              el.find('.table__wrapper').html(table.drawData(response.data))
+              el.find('.js-table-wrapper').html(table.drawData(response.data))
             }
             else {
               table.navigation.all = 0
               table.navigation.pages = 0
               table.navigation.current = 0
-              table.updateNavigation()
-              $('.js-pagination-count-start').html(0)
+              table.updateNavigation(0)
 
               el.find('.table__wrapper').html(
-                `<div class="table__row">
-                  <div class="table__cell">
+                `<div class="table__row js-table-row">
+                  <div class="table__cell js-table-cell">
                     <div class="u-full-width u-text-center u-pt-16">
                       <p>Sorry, no matching records found.</p>
                     </div>
@@ -217,30 +326,6 @@ block content
           async: false
         })
     }
-
-    base.sendFormData(
-      null,
-      `${base.base}currencies/`,
-      'GET',
-      (response) => {
-        if (response) {
-          response.data.forEach(function (item, index) {
-            const $option = $('<option>', {
-              text: item,
-              value: item
-            })
-
-            $option.appendTo($('.js-select-currency'))
-
-            $('.js-loader').removeClass('loader--active')
-          })
-        }
-      }, function (xhr, status, error) {
-        console.error(error);
-      },
-      {
-        async: false
-      })
 
     $('.js-form-tickets').on('submit', function(e) {
       e.preventDefault()
@@ -268,7 +353,106 @@ block content
     })
 
 
-    $('.js-table-tickets').on('click', $('[data-cell="username"]'), function (e) {
-      console.log(e.target.hasAttribute('data-cell'))
-      $('[name="username"]').val(e.target.innerText)
+    $('body').on('click', '[data-cell="username"]', function () {
+      $('[name="username"]').val($(this).text())
+    })
+
+    // const printHtmlBlock = (htmlBlock) => {
+    //   const myWindow = window.open()
+    //   myWindow.document.write(htmlBlock)
+    //   myWindow.document.close()
+    //   myWindow.print()
+    //   myWindow.close()
+    // }
+    //
+    //
+    // printHtmlBlock($('#js-print-ticket').html())
+
+
+
+
+    $('body').on('click', '.js-action', function () {
+      const $type = $(this).attr('data-type')
+      const $parent = $(this).parent()
+      const $id = $parent.next('[data-cell="ticketId"]').text()
+      const $row = $parent.closest('.js-table-row')
+
+      if ($type === ACTIONS.PRINT) {
+        printJS({
+          printable: 'js-print-ticket',
+          type: 'html',
+          documentTitle: null,
+          css: '../css/app.css',
+        })
+      }
+      else if($type === ACTIONS.DROPDOWN) {
+        $(this).toggleClass('action--active')
+        $row.toggleClass('table__row--primary-alpha-05')
+
+        if ($(this).hasClass('action--active')) {
+          if ($(`[data-dropdown="${$id}"]`).length) {
+            $(`[data-dropdown="${$id}"]`).show()
+          }
+          else {
+            const $line = $(`<div class="table__row table__row--primary-alpha-01 js-table-row" data-dropdown="${$id}">`)
+
+            let html = `
+                          <div class="table__cell js-table-cell">
+                              <div class="table js-table-group u-mb-16">
+                                 <div class="table__row js-table-row">
+                                    <div class="table__cell js-table-cell" data-key="group"><strong>GR</strong></div>
+                                    <div class="table__cell js-table-cell" data-key="combi"><strong>Combi</strong></div>
+                                    <div class="table__cell js-table-cell" data-key="amount"><strong>Stake</strong></div>
+                                    <div class="table__cell js-table-cell" data-key="minwin"><strong>Pot. Min win</strong></div>
+                                    <div class="table__cell js-table-cell" data-key="maxwin"><strong>Pot. MAX win</strong></div>
+                                    <div class="table__cell js-table-cell" data-key="bonus"><strong>Bonus</strong></div>
+                                 </div>
+                                 <div class="table__wrapper js-table-wrapper"></div>
+                              </div>
+
+                              <div class="table js-table-bets">
+                                  <div class="table__row js-table-row">
+                                      <div class="table__cell js-table-cell" data-key="details.game"><strong>Game</strong></div>
+                                      <div class="table__cell js-table-cell" data-key="details.eventId"><strong>Event</strong></div>
+                                      <div class="table__cell js-table-cell" data-key="market"><strong>Type</strong></div>
+                                      <div class="table__cell js-table-cell" data-key="selection"><strong>Pick</strong></div>
+                                      <div class="table__cell js-table-cell" data-key="odds"><strong>Odds</strong></div>
+                                      <div class="table__cell js-table-cell" data-key="details.results"><strong>Results</strong></div>
+                                      <div class="table__cell js-table-cell" data-key="status"><strong>State</strong></div>
+                                  </div>
+                                  <div class="table__wrapper js-table-wrapper"></div>
+                              </div>
+                          </div>`
+
+            $line.html(html)
+            $line.insertAfter($row)
+
+            base.sendFormData(
+              null,
+              `${base.base}tickets/details/?id=${$id}`,
+              'GET',
+              (response) => {
+                if (response) {
+                  ticketPrint(response.data[0], $parent.parent().find('[data-cell="username"]').text())
+
+                  table.setKeys($line.find('.js-table-bets'))
+                  $line.find('.js-table-bets .js-table-wrapper').html(table.drawData(response.data[0].bets))
+
+
+                  if (response.data[0].group.length > 0) {
+                    table.setKeys($line.find('.js-table-group'))
+                    $line.find('.js-table-group .js-table-wrapper').html(table.drawData(response.data[0].group))
+                  }
+                  else {
+                    $line.find('.js-table-group').remove()
+                  }
+                }
+              }
+            )
+          }
+        }
+        else {
+          $(`[data-dropdown="${$id}"]`).hide()
+        }
+      }
     })

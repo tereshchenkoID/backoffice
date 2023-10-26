@@ -80,6 +80,7 @@
     "@barba/core": "^2.3.10",
     "@barba/router": "^2.1.4",
     "jquery": "^3.4.1",
+    "print-js": "^1.6.0",
     "select2": "^4.1.0-rc.0"
   }
 }

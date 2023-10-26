@@ -44,4 +44,7 @@ export const ACTIONS = {
   EDIT: 'edit',
   TRANSFER: 'transfer',
   PASSWORD: 'password',
+  DROPDOWN: 'dropdown',
+  PRINT: 'print',
+  CALCULATE: 'calculate'
 }
