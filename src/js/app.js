@@ -1,19 +1,31 @@
-import {ACTIONS, SETTINGS} from "./constant/constant"
+import SETTINGS from "./constant/constant"
+
+import loader from "./functions/loader"
+
+import tostify from "./plugins/tostify";
 
 import Base from "./classes/base";
 import Forms from './classes/forms'
-import Table from "./classes/table";
+import Table from './classes/table'
+import Ticket from './classes/ticket'
+import Dialog from './classes/dialog'
 
 const base = new Base()
 const forms = new Forms()
 const table = new Table()
+const ticket = new Ticket()
+const dialog = new Dialog()
+
+window.SETTINGS = SETTINGS
+
+window.tostify = tostify
+window.loader = loader
 
 window.base = base
 window.forms = forms
 window.table = table
-window.ACTIONS = ACTIONS
-window.SETTINGS = SETTINGS
-
+window.ticket = ticket
+window.dialog = dialog
 
 base.updateLanguage()
 setInterval(base.updateDateTime, 1000);

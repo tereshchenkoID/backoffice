@@ -1,50 +1,31 @@
-export const SETTINGS = {
-  locked: {
-    0: "No",
-    1: "Yes"
+const SETTINGS = {
+
+  TICKET_STATUSES: {
+    0:  'CONFIRMED',
+    4:  'LOSE',
+    5:  'WON (Not Paid)',
+    6:  'WON (Paid Out)',
+    9:  'EXPIRED',
+    13: 'CANCELLED'
   },
-  choice: [
-    {
-      value: 0,
-      text: 'Yes'
-    },
-    {
-      value: 1,
-      text: 'No'
-    },
-  ],
-  country: [
-    {
-      value: 0,
-      text: 'Ukraine'
-    },
-    {
-      value: 1,
-      text: 'Poland'
-    },
-  ],
-  currency: [
-    {
-      value: 0,
-      text: 'All'
-    },
-    {
-      value: 1,
-      text: 'AMD'
-    },
-    {
-      value: 2,
-      text: 'EUR'
-    },
-  ]
+
+  STAKE_STATUSES: {
+    0:  'OPEN',
+    4:  'LOSE',
+    5:  'WIN',
+    13: 'CANCEL',
+  },
+
+  TICKET_ACTIONS: {
+    ADD: 'add',
+    EDIT: 'edit',
+    TRANSFER: 'transfer',
+    PASSWORD: 'password',
+    DROPDOWN: 'dropdown',
+    PRINT: 'print',
+    CALCULATE: 'calculate',
+    CANCEL: 'cancel'
+  }
 }
 
-export const ACTIONS = {
-  ADD: 'add',
-  EDIT: 'edit',
-  TRANSFER: 'transfer',
-  PASSWORD: 'password',
-  DROPDOWN: 'dropdown',
-  PRINT: 'print',
-  CALCULATE: 'calculate'
-}
+export default SETTINGS

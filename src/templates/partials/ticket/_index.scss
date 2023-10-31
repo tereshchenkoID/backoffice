@@ -1,0 +1,64 @@
+@use 'src/scss/config' as *;
+
+.ticket {
+  $color: #000;
+
+  @include make-spacer(p, 20px);
+
+  max-width: rem(420px);
+  color: $color;
+  font-size: rem(12px);
+
+  &__head {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    align-items: center;
+    grid-gap: rem(20px);
+  }
+
+  &__logo {
+    @include size(100%, auto);
+  }
+
+  &__row {
+    @include make-spacer(mb, 5px);
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    &:last-child {
+      @include make-spacer(mb, 5px);
+    }
+
+    &--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__body {
+    @include make-spacer(pt, 20px);
+  }
+
+  &__title {
+    @include make-spacer(mb, 20px);
+  }
+
+  &__code {
+    @include flex(center, center);
+    @include make-spacer(mx, auto);
+    @include make-spacer(mb, 20px);
+
+    font-size: rem(20px);
+    font-family: var(--font-family-code);
+    height: rem(70px);
+    color: $color;
+    //font-size: rem(50px);
+    line-height: 1;
+  }
+
+  &__block {
+    @include make-spacer(py, 10px);
+
+    border-top: 1px solid $color;
+  }
+}

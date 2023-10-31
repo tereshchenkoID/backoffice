@@ -1,0 +1,9 @@
+mixin dialog(text)
+  .dialog&attributes(attributes)
+    .dialog__wrapper
+      .dialog__body
+        p.js-dialog-question
+      .dialog__footer
+        .u-text-right
+          +button('Yes')(type="button").button--primary.js-dialog-accept
+          +button('No')(type="button").button--default.u-ml-16.js-dialog-dismiss

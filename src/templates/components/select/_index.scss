@@ -2,6 +2,7 @@
 
 .select {
   position: relative;
+  width: 100%;
 
   &__label {
     @include make-spacer(px, 4px);
@@ -14,6 +15,28 @@
     z-index: 1;
     color: var(--color-text);
     font-size: rem(12px);
+  }
+
+  &--sm {
+
+    .select2 {
+
+      .select2-container--default,
+      .select2-selection--single,
+      .select2-selection--multiple {
+        @include make-spacer(px, 8px);
+
+        height: rem(46px);
+        font-size: rem(12px);
+
+        .select2-selection {
+
+          &__arrow {
+            width: rem(36px);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -40,7 +63,6 @@
 
         top: 0;
         bottom: 0;
-        width: rem(56px);
 
         b {
           @include make-spacer(m, 0);
@@ -169,6 +191,7 @@
   .select2-results {
 
     &__option {
+      font-size: rem(14px);
 
       &--selected {
         background-color: rgba(0, 0, 0, 0.04);

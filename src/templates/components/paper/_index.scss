@@ -17,10 +17,14 @@
     gap: rem(16px);
   }
 
-  &__heaadline {
+  &__headline {
     display: grid;
     grid-template-columns: 1fr rem(200px);
     align-items: center;
+
+    &--wide {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__row {

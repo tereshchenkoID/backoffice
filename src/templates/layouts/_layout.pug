@@ -8,9 +8,11 @@ html(lang="en")
     include _head
   body
     +loader.js-loader
+    +dialog.js-dialog
     +header#header
     +nav#nav
     +aside#aside
     block content
 
-    //script(src="./js/app.js")
+    script(src="./js/app.js")
+    block script

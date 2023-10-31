@@ -129,6 +129,27 @@ hr {
     pointer-events: none;
   }
 
+  &--disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  &--calculate {
+
+    &.action {
+
+      &--active {
+
+        i {
+
+          &::before {
+            content: '\f0c7';
+          }
+        }
+      }
+    }
+  }
+
   &--dropdown {
 
     &.action {
@@ -249,66 +270,26 @@ hr {
   }
 }
 
+.toastify {
 
-
-
-.print-ticket {
-  $color: #000;
-
-  @include make-spacer(p, 20px);
-
-  max-width: rem(420px);
-  color: $color;
-  font-size: rem(12px);
-
-  &__head {
-    display: grid;
-    grid-template-columns: 2fr 3fr;
-    align-items: center;
-    grid-gap: rem(20px);
+  &.info {
+    background: #3498db;
   }
 
-  &__logo {
-    @include size(100%, auto);
+  &.warning {
+    background: #f1c40f;
   }
 
-  &__row {
-    @include make-spacer(mb, 5px);
-
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    &:last-child {
-      @include make-spacer(mb, 5px);
-    }
-
-    &--3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  &.success {
+    background: #07bc0c;
   }
 
-  &__body {
-    @include make-spacer(py, 20px);
+  &.error {
+    background: #e74c3c;
   }
 
-  &__title {
-    @include make-spacer(mb, 20px);
-  }
-
-  &__code {
-    @include flex(center, center);
-    @include make-spacer(mx, auto);
-    @include make-spacer(mb, 20px);
-
-    font-size: rem(20px);
-    font-family: var(--font-family-code);
-    height: rem(70px);
-    color: $color;
-  }
-
-  &__block {
-    @include make-spacer(py, 10px);
-
-    border-top: 1px solid $color;
+  .toast-close {
+    @include make-spacer(ml, 10px);
+    @include make-spacer(p, 0);
   }
 }
