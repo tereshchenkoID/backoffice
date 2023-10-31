@@ -71,9 +71,9 @@ block content
             +button('Save')(type="submit").button--primary
             +button('Cancel')(type="reset").button--default.u-ml-16
 
-  script(src="./js/app.js")
+block script
   script.
-    $('.js-loader').addClass('loader--active')
+    loader()
 
     const renderDropdownOptions = (data, $parent) => {
       const $group = $('<div class="dropdown__group js-dropdown-group">');
@@ -125,7 +125,7 @@ block content
 
             $option.appendTo($('.js-select-currency'))
 
-            $('.js-loader').removeClass('loader--active')
+            loader()
           })
         }
       }, function (xhr, status, error) {

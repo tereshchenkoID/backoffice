@@ -84,9 +84,32 @@ Table.prototype.getPath = function(data, el) {
 
   if (typeof result === 'object') {
     if (typeof result[0] === 'number') {
-      return result.join('-')
+      let a = ''
+
+      result.forEach(function(item, index) {
+        a += `<span>${item}</span>`
+              if (index !== result.length - 1 ) {
+                a += `<span> - </span>`
+              }
+      })
+
+      return a
+      // return result.map(item => `<span>${item}</span><span>-</span>`)
+      // return result.join('-')
     }
-    return result.join(',')
+    let a = ''
+
+    result.forEach(function(item, index) {
+      a += `<span>${item}</span>`
+            if (index !== result.length - 1 ) {
+              a += `<span> , </span>`
+            }
+    })
+
+    return a
+
+    // return result.map(item => `<span>${item}</span><span>,</span>`)
+    // return result.join(',')
   }
 
   return result

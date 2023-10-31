@@ -1,23 +1,53 @@
 @use 'src/scss/config' as *;
 
 .table {
-  //display: table;
-  //border-spacing: 0;
-  //border-collapse: collapse;
   width: 100%;
   font-size: rem(14px);
 
+  &--tickets {
+
+    .table {
+
+      &__row {
+        grid-template-columns: repeat(10, 1fr);
+      }
+    }
+  }
+
+  &--group {
+
+    .table {
+
+      &__row {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+  }
+
+  &--bets {
+
+    .table {
+
+      &__row {
+        grid-template-columns: repeat(4, 1fr) rem(150px) 2fr rem(200px);
+      }
+    }
+  }
+
   &__row {
-    @include flex;
-    //display: grid;
-    //grid-template-columns: repeat(8, 1fr);
-    //display: table-row;
-    //outline: 0;
-    //vertical-align: middle;
+    display: grid;
     border-bottom: rem(1px) solid var(--color-border);
+
+    &:first-child {
+      font-weight: var(--typography-medium);
+    }
 
     &--disabled {
       opacity: 0.7;
+    }
+
+    &--wide {
+      grid-template-columns: 1fr!important;
     }
 
     &--primary-alpha-05 {
@@ -38,29 +68,6 @@
     @include make-spacer(px, 16px);
     @include make-spacer(py, 12px);
 
-    flex: 1;
-    //display: table-cell;
-    //vertical-align: inherit;
-
     //border: 1px solid red;
-  }
-
-  &__list {
-    @include make-spacer(mb, 10px);
-    @include transition(all);
-
-    width: 100%;
-
-    &--hidden {
-      @include line-clamp(2);
-    }
-  }
-
-  &__link {
-    color: var(--color-primary);
-  }
-
-  &__button {
-    @include flex(null, center);
   }
 }

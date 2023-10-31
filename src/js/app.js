@@ -42,19 +42,19 @@ $('body').on('click', '.js-show-more', function() {
   }
 })
 
-$('body').on('click', '.js-navbar-link', function() {
-  const id = $(this).attr('data-id')
-  const idx = $(this).attr('data-idx')
-
-  table.getData($('.js-table-accounts'), id)
-  table.navbar.splice(Number(idx) + 1)
-
-  if(table.navbar.length === 1) {
-    table.navbar = []
-  }
-
-  table.updateNavbar()
-})
+// $('body').on('click', '.js-navbar-link', function() {
+//   const id = $(this).attr('data-id')
+//   const idx = $(this).attr('data-idx')
+//
+//   table.getData($('.js-table-accounts'), id)
+//   table.navbar.splice(Number(idx) + 1)
+//
+//   if(table.navbar.length === 1) {
+//     table.navbar = []
+//   }
+//
+//   table.updateNavbar()
+// })
 
 $('body').on('click', function(e) {
   if (!$('.js-action').is(e.target) && $('.js-action').has(e.target).length === 0) {

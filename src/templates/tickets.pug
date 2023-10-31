@@ -86,7 +86,7 @@ block content
       .paper__body
         .paper__form
           +pagination.pagination--top.js-pagination
-          .table.js-table.js-table-tickets
+          .table.table--tickets.js-table.js-table-tickets
           +pagination.pagination--bottom.js-pagination
 
 block script
@@ -207,6 +207,7 @@ block script
     base.initDynamicSelect('currencies/', $('.js-select-currency'))
 
     loader()
+    let data = {}
 
     const handleSubmit = (action = null) => {
       let page = 0
@@ -289,11 +290,11 @@ block script
           $(`[data-dropdown="${$id}"]`).show()
         }
         else {
-          const $line = $(`<div class="table__row table__row--primary-alpha-01 js-table-row" data-dropdown="${$id}">`)
+          const $line = $(`<div class="table__row table__row--wide table__row--primary-alpha-01 js-table-row" data-dropdown="${$id}">`)
 
           let html = `  <div class="table__cell js-table-cell">
-                            <div class="table js-table js-table-group u-mb-16"></div>
-                            <div class="table js-table js-table-bets"></div>
+                            <div class="table table--group js-table js-table-group u-mb-16"></div>
+                            <div class="table table--bets js-table js-table-bets"></div>
                         </div>`
 
           $line.html(html)
@@ -305,6 +306,8 @@ block script
             'GET',
             (response) => {
               if (response) {
+                data[$id] = response.data[0]
+
                 table.drawHTML($line.find('.js-table-bets'), config_3, response.data[0].bets)
 
                 $('.js-table-bets [data-cell="status"]').each(function () {
@@ -326,12 +329,13 @@ block script
             false
           )
         }
-      } else {
+      }
+      else {
         $(`[data-dropdown="${$id}"]`).hide()
       }
     }
 
-    const actionCalculate = ($el, $row) => {
+    const actionCalculate = ($el, $id, $row) => {
       $el.toggleClass('action--active')
 
       const $dropdown = $row.find('[data-type="dropdown"]')
@@ -358,18 +362,54 @@ block script
         ticket_status.attr('data-value', select.val())
         ticket_status.html(select.text())
 
+        data[$id].status = Number(select.val())
+
         stake_statuses.map(function (index, item) {
           select = $(item).find('.js-select-input option:selected')
 
           $(item).attr('data-value', select.val())
           $(item).html(select.text())
+
+          data[$id].bets[index].status = Number(select.val())
         })
 
         stake_results.map(function (index, item) {
-          $(item).html($(item).find('.js-textarea-input').val())
+          select = $(item).find('.js-textarea-input')
+
+          $(item).html(select.val())
+
+          if (select.val().indexOf(',') !== -1) {
+            data[$id].bets[index].details.results = select.val().split(',')
+          }
+          else {
+            data[$id].bets[index].details.results = select.val().split('-').map(Number)
+          }
         })
 
-        $dropdown.toggleClass('action--disabled')
+        data[$id].action = 'save'
+
+        base.sendFormData(
+          JSON.stringify(data[$id]),
+          `${base.base}tickets/calculate/?id=${$id}`,
+          'POST',
+          (response) => {
+            if (response) {
+              if (response.data[0].code === '0') {
+                tostify(response.data[0].message, 'success').showToast()
+              } else {
+                tostify(response.data[0].error_message, 'error').showToast()
+              }
+
+              $dropdown.toggleClass('action--disabled')
+            }
+          },
+          null,
+          {
+            async: false,
+            dataType: 'json',
+          },
+          false
+        )
       }
     }
 
@@ -461,7 +501,7 @@ block script
         )
       }
       else if ($type === SETTINGS.TICKET_ACTIONS.CALCULATE) {
-        actionCalculate($(this), $row)
+        actionCalculate($(this), $id, $row)
       }
       else if($type === SETTINGS.TICKET_ACTIONS.PRINT) {
         base.sendFormData(

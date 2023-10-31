@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import util from 'gulp-util';
 
 const production = util.env.production || util.env.prod || util.env._.indexOf('build') !== -1 || false;
@@ -5,7 +6,7 @@ const destPath = 'build';
 
 const config = {
     env       : 'development',
-    production: production,
+    production,
 
     src: {
         root         : 'src',
@@ -35,26 +36,26 @@ const config = {
     dest: {
         root : destPath,
         html : destPath,
-        css  : destPath + '/css',
-        js   : destPath + '/js',
-        img  : destPath + '/img',
-        fonts: destPath + '/fonts',
-        json : destPath + '/json',
-        lib  : destPath + '/lib',
-        data : destPath + '/data'
+        css  : `${destPath  }/css`,
+        js   : `${destPath  }/js`,
+        img  : `${destPath  }/img`,
+        fonts: `${destPath  }/fonts`,
+        json : `${destPath  }/json`,
+        lib  : `${destPath  }/lib`,
+        data : `${destPath  }/data`
     },
 
-    setEnv: function(env) {
+    setEnv(env) {
       if (typeof env !== 'string') return;
       this.env = env;
       this.production = env === 'production';
       process.env.NODE_ENV = env;
     },
 
-    logEnv: function() {
+    logEnv() {
         util.log(
           'Environment:',
-          util.colors.white.bgRed(' ' + process.env.NODE_ENV + ' ')
+          util.colors.white.bgRed(` ${  process.env.NODE_ENV  } `)
         );
     },
 

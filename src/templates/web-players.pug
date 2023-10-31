@@ -26,8 +26,10 @@ block content
             +button('New web player')(type="button").button--primary.u-ml-16
             +button('Cancel')(type="reset").button--default.u-ml-16
 
-  script(src="./js/app.js")
+block script
   script.
+    loader()
+
     const renderDropdownOptions = (data, $parent) => {
       const $group = $('<div class="dropdown__group js-dropdown-group">');
 
@@ -62,4 +64,8 @@ block content
       },
       {
         async: false
-      })
+      },
+      false,
+    )
+
+    loader()
