@@ -9,7 +9,7 @@
 body {
   @include smooth-font;
 
-  min-width: rem(1200px);
+  min-width: rem(1366px);
   min-height: 100vh;
   overflow-y: auto;
   line-height: var(--line-height);

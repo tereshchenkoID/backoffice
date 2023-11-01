@@ -27,7 +27,7 @@ window.table = table
 window.ticket = ticket
 window.dialog = dialog
 
-base.updateLanguage()
+base.setLanguage()
 setInterval(base.updateDateTime, 1000);
 
 $('body').on('click', '.js-show-more', function() {
@@ -108,7 +108,7 @@ $('body').on('click', '.js-dropdown-link', function() {
   if ($parent.hasClass('js-select-language')) {
     localStorage.setItem('lang', $(this).attr('data-value'))
     base.language = $(this).attr('data-value')
-    base.updateLanguage()
+    base.setLanguage()
   }
 })
 

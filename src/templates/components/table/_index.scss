@@ -11,6 +11,13 @@
       &__row {
         grid-template-columns: repeat(10, 1fr);
       }
+
+      &__cell {
+
+        &:nth-child(5) {
+          @include make-spacer(py, 0);
+        }
+      }
     }
   }
 
@@ -29,7 +36,7 @@
     .table {
 
       &__row {
-        grid-template-columns: repeat(4, 1fr) rem(150px) 2fr rem(200px);
+        grid-template-columns: 1.5fr repeat(3, 1fr) rem(150px) 2fr rem(200px);
       }
     }
   }
@@ -67,7 +74,5 @@
     @include flex(null, center, null, wrap);
     @include make-spacer(px, 16px);
     @include make-spacer(py, 12px);
-
-    //border: 1px solid red;
   }
 }

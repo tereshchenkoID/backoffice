@@ -48,7 +48,17 @@ Base.prototype.sendFormData = function(
   });
 }
 
-Base.prototype.updateLanguage = function() {
+Base.prototype.updateLanguage = function(data, block = null) {
+  const elements = block ? block.querySelectorAll('[data-lang]') : document.querySelectorAll('[data-lang]')
+
+  elements.forEach(item => {
+    // eslint-disable-next-line no-param-reassign
+    item.innerHTML = data[item.getAttribute('data-lang')]
+  })
+}
+
+Base.prototype.setLanguage = function() {
+  const self = this
   const $parent = $('.js-select-language')
   $parent.find(`.js-dropdown-link[data-value="${this.language}"]`).addClass('dropdown__link--active')
   $parent.find('.js-dropdown-selected span').text(this.language.toUpperCase())
@@ -56,16 +66,12 @@ Base.prototype.updateLanguage = function() {
 
   this.sendFormData(
     null,
-    `http://localhost:8080/json/${localStorage.getItem('lang') || 'en'}.json`,
+    `../json/${localStorage.getItem('lang') || 'en'}.json`,
     'GET',
     (response) => {
       if (response) {
-        const elements = document.querySelectorAll('[data-lang]')
-
-        elements.forEach(item => {
-          // eslint-disable-next-line no-param-reassign
-          item.innerHTML = response[item.getAttribute('data-lang')]
-        })
+        window.language = response
+        self.updateLanguage(response)
       }
     },
     null,

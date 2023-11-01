@@ -1,7 +1,7 @@
 mixin field(placeholder, classname)
   .field.js-field(class=classname)
     input&attributes(attributes).field__input.js-field-input
-    label.field__label.js-field-label= placeholder
+    label(data-lang=placeholder).field__label.js-field-label
     if classname === 'field--password'
       button.field__eye.js-field-eye
         i.fa.fa-eye

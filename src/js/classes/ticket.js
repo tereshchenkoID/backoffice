@@ -7,24 +7,38 @@ export default function Ticket() {}
 Ticket.prototype.html = function(data, shop) {
   let html = `<div class="ticket" id="js-ticket">
                         <div class="ticket__head">
-                          <div class="ticket__logo"><img class="img" src="https://api.qool90.bet/img/vb.png"></div>
+                          <div class="ticket__logo">
+                            <img class="img" src="https://api.qool90.bet/img/vb.png">
+                          </div>
                           <div class="ticket__meta">
                             <div class="ticket__wrapper">
                               <div class="ticket__row">
-                                <div class="u-text-left">Shop:</div><strong class="u-text-right">${shop}</strong>
+                                <div class="u-text-left">
+                                  <span data-lang="shop"></span>
+                                  <span>:</span>
+                                </div>
+                                <strong class="u-text-right">${shop}</strong>
                               </div>
                               <div class="ticket__row">
-                                <div class="u-text-left">Bet:</div><strong class="u-text-right">${base.getDate(data.placed)}</strong>
+                                <div class="u-text-left">
+                                  <span data-lang="bet"></span>
+                                  <span>:</span>
+                                </div>
+                                <strong class="u-text-right">${base.getDate(data.placed)}</strong>
                               </div>
                               <div class="ticket__row">
-                                <div class="u-text-left">Time:</div><strong class="u-text-right">${base.getDate(data.placed, 'time-local')}</strong>
+                                <div class="u-text-left">
+                                  <span data-lang="time"></span>
+                                  <span>:</span>
+                                </div>
+                                <strong class="u-text-right">${base.getDate(data.placed, 'time-local')}</strong>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div class="ticket__body">
                           <div class="ticket__title u-text-center">
-                            <span class="u-mr-8">TICKET</span>
+                            <span class="u-mr-8 u-text-transform-uppercase" data-lang="ticket"></span>
                             <strong>#${data.id}</strong>
                           </div>
                           <div class="ticket__code u-text-center">${data.id}</div>`
@@ -32,11 +46,18 @@ Ticket.prototype.html = function(data, shop) {
               data.group.forEach(item => {
                 html += `<div class="ticket__block">
                            <div class="ticket__row">
-                              <div class="u-text-left">GR: <strong>${item.group}</strong></div>
+                              <div class="u-text-left">
+                                <span class="u-text-transform-uppercase" data-lang="gr"></span>
+                                <span>:</span>
+                                <strong>${item.group}</strong>
+                              </div>
                               <div class="u-text-right"><strong>${item.amount}</strong></div>
                            </div>
                            <div class="ticket__row">
-                               <div class="u-text-left">Min/Max Win:</div>
+                               <div class="u-text-left">
+                                 <span data-lang="min_max_win"></span>
+                                 <span>:</span>
+                               </div>
                                <div class="u-text-right">
                                   ${data.currency} <strong>${item.minwin.toFixed(2)}</strong>
                                   /
@@ -70,7 +91,7 @@ Ticket.prototype.html = function(data, shop) {
             html += `  </div>
                       </div>
                       <div class="u-text-right">
-                        <button type="button" class="button button--primary js-ticket-print" title="Print ticket">Print</button>
+                        <button type="button" class="button button--primary js-ticket-print" title="Print ticket" data-lang="print"></button>
                       </div>`
 
   return html

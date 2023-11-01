@@ -62,10 +62,10 @@ Table.prototype.actionHTML = function(type) {
 }
 
 Table.prototype.emptyHTML = function() {
-  return `<div class="table__row js-table-row">
+  return `<div class="table__row table__row--wide js-table-row">
             <div class="table__cell js-table-cell">
                 <div class="u-full-width u-text-center u-pt-16">
-                    <p>Sorry, no matching records found.</p>
+                    <p data-lang="rows_empty"></p>
                 </div>
             </div>
           </div>`
@@ -84,32 +84,9 @@ Table.prototype.getPath = function(data, el) {
 
   if (typeof result === 'object') {
     if (typeof result[0] === 'number') {
-      let a = ''
-
-      result.forEach(function(item, index) {
-        a += `<span>${item}</span>`
-              if (index !== result.length - 1 ) {
-                a += `<span> - </span>`
-              }
-      })
-
-      return a
-      // return result.map(item => `<span>${item}</span><span>-</span>`)
-      // return result.join('-')
+      return result.join(' - ')
     }
-    let a = ''
-
-    result.forEach(function(item, index) {
-      a += `<span>${item}</span>`
-            if (index !== result.length - 1 ) {
-              a += `<span> , </span>`
-            }
-    })
-
-    return a
-
-    // return result.map(item => `<span>${item}</span><span>,</span>`)
-    // return result.join(',')
+    return result.join(' , ')
   }
 
   return result
@@ -121,9 +98,10 @@ Table.prototype.drawHTML = function(el, config, data) {
 
   html += `<div class="table__row js-table-row">`
   config.forEach(function(item) {
-    html += `<div class="table__cell js-table-cell">
-                ${item.text || ''}
-             </div>`
+    if (item.text)
+      html += `<div class="table__cell js-table-cell" data-lang="${item.text}"></div>`
+    else
+      html += `<div class="table__cell js-table-cell"></div>`
   })
   html += '</div>'
 

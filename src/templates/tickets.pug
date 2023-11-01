@@ -8,8 +8,8 @@ block content
   main.main
     .paper.paper--wide.u-mb-24
       .paper__headline
-        h5 Tickets search
-        +select('Rows', [
+        h5(data-lang="tickets_search")
+        +select('rows', [
           {
             value: 20,
             text: '20',
@@ -28,9 +28,9 @@ block content
       .paper__body
         form.paper__form.js-form-tickets
           .paper__row.paper__row--4
-            +field('Ticket')(type="text" name="ticket")
-            +field('Username')(type="text" name="username")
-            +select('State', [
+            +field('ticket_form_ticket')(type="text" name="ticket")
+            +field('ticket_form_username')(type="text" name="username")
+            +select('ticket_form_state', [
               {
                 value: 0,
                 text: 'Any',
@@ -54,7 +54,7 @@ block content
               },
             ])(name="state")
 
-            +select('Player Type', [
+            +select('ticket_form_player_type', [
               {
                 value: 0,
                 text: 'Any',
@@ -70,21 +70,21 @@ block content
               },
             ])(name="type")
           .paper__row.paper__row--4
-            +field('Date from')(type="datetime-local" name="date-from")
-            +field('Date to')(type="datetime-local" name="date-to")
-            +field('Amount from')(type="number" name="amount-from")
-            +field('Amount to')(type="number" name="amount-to")
+            +field('ticket_form_date_from')(type="datetime-local" name="date-from")
+            +field('ticket_form_date_to')(type="datetime-local" name="date-to")
+            +field('ticket_form_amount_from')(type="number" name="amount-from")
+            +field('ticket_form_amount_to')(type="number" name="amount-to")
           .paper__row.paper__row--4
-            +select('Currency', [])(name="currency").js-select-currency
-            +field('Payout from')(type="number" name="payout-from")
-            +field('Payout to')(type="number" name="payout-to")
+            +select('ticket_form_currency', [])(name="currency").js-select-currency
+            +field('ticket_form_payout_from')(type="number" name="payout-from")
+            +field('ticket_form_payout_to')(type="number" name="payout-to")
           .paper__block.u-text-right
-            +button('Search')(type="submit").button--primary
-            +button('Cancel')(type="reset").button--default.u-ml-16
+            +button('search')(type="submit").button--primary
+            +button('cancel')(type="reset").button--default.u-ml-16
 
     .paper.paper--wide
       .paper__body
-        .paper__form
+        .paper__form.js-form-tables
           +pagination.pagination--top.js-pagination
           .table.table--tickets.js-table.js-table-tickets
           +pagination.pagination--bottom.js-pagination
@@ -99,35 +99,35 @@ block script
       },
       {
         key: 'ticketId',
-        text: 'Ticket ID'
+        text: 'ticket_table_1_1'
       },
       {
         key: 'username',
-        text: 'Shop'
+        text: 'ticket_table_1_2'
       },
       {
         key: 'game',
-        text: 'Game Details'
+        text: 'ticket_table_1_3'
       },
       {
         key: 'status',
-        text: 'Status'
+        text: 'ticket_table_1_4'
       },
       {
         key: 'currency',
-        text: 'Currency'
+        text: 'ticket_table_1_5'
       },
       {
         key: 'payout',
-        text: 'Payout'
+        text: 'ticket_table_1_6'
       },
       {
         key: 'stake',
-        text: 'Sum of Stakes'
+        text: 'ticket_table_1_7'
       },
       {
         key: 'bookTime',
-        text: 'Finalized'
+        text: 'ticket_table_1_8'
       },
       {
         actions: 'cancel,print,calculate'
@@ -137,70 +137,66 @@ block script
     let config_2 = [
       {
         key: 'group',
-        text: 'GR'
+        text: 'ticket_table_2_1'
       },
       {
         key: 'combi',
-        text: 'Combi'
+        text: 'ticket_table_2_2'
       },
       {
         key: 'amount',
-        text: 'Stake',
+        text: 'ticket_table_2_3',
         fixed: true
       },
       {
         key: 'minwin',
-        text: 'Pot. Min win',
-        // replace: 'currency',
+        text: 'ticket_table_2_4',
         fixed: true
       },
       {
         key: 'maxwin',
-        text: 'Pot. MAX win',
-        // replace: 'currency',
+        text: 'ticket_table_2_5',
         fixed: true
       },
       {
         key: 'bonus',
-        text: 'Bonus'
+        text: 'ticket_table_2_6'
       }
     ]
 
     let config_3 = [
       {
         key: 'details.game',
-        text: 'Game'
+        text: 'ticket_table_3_1'
       },
       {
         key: 'details.eventId',
-        text: 'Event'
+        text: 'ticket_table_3_2'
       },
       {
         key: 'market',
-        text: 'Type'
+        text: 'ticket_table_3_3'
       },
       {
         key: 'selection',
-        text: 'Pick'
+        text: 'ticket_table_3_4'
       },
       {
         key: 'odds',
-        text: 'Odds'
+        text: 'ticket_table_3_5'
       },
       {
         key: 'details.results',
-        text: 'Results'
+        text: 'ticket_table_3_6'
       },
       {
         key: 'status',
-        text: 'State'
+        text: 'ticket_table_3_7'
       }
     ]
 
     $('.js-table-tickets .js-table-wrapper').html(table.emptyHTML)
-
-    $('[name="date-from"]').val('2020-10-29T00:00')
-    // $('[name="date-from"]').val(base.getDate(new Date().setHours(0, 0, 0, 0), 'datetime-local'))
+    $('[name="date-from"]').val(base.getDate(new Date().setHours(0, 0, 0, 0), 'datetime-local'))
     $('[name="date-to"]').val(base.getDate(new Date(), 'datetime-local'))
     $('[name="quantity"]').val(table.navigation.quantity)
 
@@ -265,6 +261,8 @@ block script
 
               table.drawHTML($('.js-table-tickets'), config, [])
             }
+
+            base.updateLanguage(window.language, document.querySelector('.js-form-tables'))
           }
         },
         null,
@@ -320,6 +318,8 @@ block script
                 } else {
                   $line.find('.js-table-group').remove()
                 }
+
+                base.updateLanguage(window.language, document.querySelector('.js-form-tables'))
               }
             },
             null,
@@ -346,9 +346,9 @@ block script
       if ($el.hasClass('action--active')) {
         $dropdown.toggleClass('action--disabled')
 
-        ticket_status.html(base.initSelect(null, SETTINGS.STAKE_STATUSES, ticket_status.attr('data-value')))
+        ticket_status.html(base.initSelect(null, SETTINGS.TICKET_STATUSES, ticket_status.attr('data-value')))
         stake_statuses.map(function (index, item) {
-          $(item).html(base.initSelect(null, SETTINGS.TICKET_STATUSES, $(item).attr('data-value')))
+          $(item).html(base.initSelect(null, SETTINGS.STAKE_STATUSES, $(item).attr('data-value')))
         })
 
         $('.js-table .js-select-input').select2();
@@ -493,7 +493,7 @@ block script
 
       if ($type === SETTINGS.TICKET_ACTIONS.CANCEL) {
         dialog.show(
-          'Are you sure you want to cancel the stake?',
+          language.ticket_dialog,
           {
             id:     $row.find('[data-cell="ticketId"]'),
             status: $row.find('[data-cell="status"]')
@@ -510,8 +510,11 @@ block script
           'GET',
           (response) => {
             if (response) {
-              $('.js-paper-title').text('Print ticket')
+              $('.js-paper-title').text(language.ticket_print_ticket)
               $('.js-paper-form').html(ticket.html(response.data[0], $row.find('[data-cell="username"]').text()))
+
+              base.updateLanguage(window.language, document.querySelector('#aside'))
+
               $('#aside').addClass('aside--active')
             }
           },
