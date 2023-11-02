@@ -61,14 +61,20 @@ Table.prototype.actionHTML = function(type) {
   }
 }
 
-Table.prototype.emptyHTML = function() {
-  return `<div class="table__row table__row--wide js-table-row">
+Table.prototype.emptyHTML = function(text) {
+  let html = `<div class="table__row table__row--wide js-table-row">
             <div class="table__cell js-table-cell">
-                <div class="u-full-width u-text-center u-pt-16">
-                    <p data-lang="rows_empty"></p>
+                <div class="table__empty u-full-width u-text-center u-pt-16">`
+                    if(text) {
+                      html += `<span>${text}</span>`
+                    }
+
+  html += `        <span data-lang="rows_empty"></span>
                 </div>
             </div>
           </div>`
+
+  return html
 }
 
 Table.prototype.getPath = function(data, el) {
@@ -92,7 +98,7 @@ Table.prototype.getPath = function(data, el) {
   return result
 }
 
-Table.prototype.drawHTML = function(el, config, data) {
+Table.prototype.drawHTML = function(el, config, data, empty = null) {
   let html = ''
   const self = this
 
@@ -130,10 +136,14 @@ Table.prototype.drawHTML = function(el, config, data) {
             value = parseFloat(value).toFixed(2)
           }
 
+          if (!value) {
+            value = ''
+          }
+
+
           // if (idx.replace) {
           //   value = `${item[idx.replace]} ${value}`
           // }
-
           html += value
         }
 
@@ -144,7 +154,7 @@ Table.prototype.drawHTML = function(el, config, data) {
     })
   }
   else {
-    html += self.emptyHTML()
+    html += self.emptyHTML(empty)
   }
 
   el.html(html)

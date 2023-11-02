@@ -1,9 +1,11 @@
 import tostify from "../plugins/tostify";
 import loader from "../functions/loader";
+import Table from "./table";
 
 export default function Base() {
   this.base     = 'https://api.qool90.bet/api/'
   this.language = localStorage.getItem('lang') || 'en'
+  this.agents   = []
 }
 
 Base.prototype.updateDateTime = function() {
@@ -48,13 +50,37 @@ Base.prototype.sendFormData = function(
   });
 }
 
+Base.prototype.getPath = function(data, el) {
+  const keys = data.split('.')
+  let result = null
+
+  keys.forEach(function(item) {
+    if (!result)
+      result = el[item]
+    else
+      result = result[item]
+  })
+
+  return result
+}
+
 Base.prototype.updateLanguage = function(data, block = null) {
   const elements = block ? block.querySelectorAll('[data-lang]') : document.querySelectorAll('[data-lang]')
 
   elements.forEach(item => {
-    // eslint-disable-next-line no-param-reassign
-    item.innerHTML = data[item.getAttribute('data-lang')]
+    const value = item.getAttribute('data-lang')
+
+    if (value.indexOf('.') !== -1) {
+      // eslint-disable-next-line no-param-reassign
+      item.innerHTML = this.getPath(value, data)
+    }
+    else {
+      // eslint-disable-next-line no-param-reassign
+      item.innerHTML = data[item.getAttribute('data-lang')]
+    }
   })
+
+  this.defaultSelect()
 }
 
 Base.prototype.setLanguage = function() {
@@ -82,27 +108,55 @@ Base.prototype.setLanguage = function() {
   );
 }
 
-Base.prototype.handleOutsideClick = function(element, event, callback) {
-  if (!element.is(event.target) && element.has(event.target).length === 0) {
-    callback();
+Base.prototype.findAgent = function(data, id) {
+  const self = this
+
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].id === id) {
+      return data[i];
+    }
+    if (data[i].clients) {
+      const result = self.findAgent(data[i].clients, id);
+      if (result) {
+        return result;
+      }
+    }
   }
+
+  return null;
 }
 
-Base.prototype.initDynamicSelect = function(url, el, key = null) {
+Base.prototype.drawAgents = function(data, $parent) {
+  const self = this
+  const $group = $('<div class="dropdown__group js-dropdown-group">');
+
+  data.forEach(function (item) {
+    const $option = $('<a class="dropdown__link js-dropdown-link">');
+    const $newGroup = $('<div class="dropdown__group js-dropdown-group">');
+    $option.text(item.username)
+    $option.attr('data-value', item.id)
+
+    if (item.clients && item.clients.length > 0) {
+      self.drawAgents(item.clients, $newGroup);
+    }
+
+    $group.append($option);
+    $group.append($newGroup);
+  });
+
+  $parent.append($group);
+}
+
+Base.prototype.initAgents = function(success) {
+  const self = this
   this.sendFormData(
     null,
-    `${this.base}${url}`,
+    `${this.base}tree/`,
     'GET',
     (response) => {
       if (response) {
-        response.data.forEach(function (item) {
-          const $option = $('<option>', {
-            text: key ? item[key] : item,
-            value: item
-          })
-
-          $option.appendTo(el)
-        })
+        self.agents = response
+        success()
       }
     },
     null,
@@ -111,6 +165,23 @@ Base.prototype.initDynamicSelect = function(url, el, key = null) {
     },
     false
   )
+}
+
+Base.prototype.handleOutsideClick = function(element, event, callback) {
+  if (!element.is(event.target) && element.has(event.target).length === 0) {
+    callback();
+  }
+}
+
+Base.prototype.initDynamicSelect = function(url, el, key = null) {
+  this.agents.forEach(function (item) {
+    const $option = $('<option>', {
+      text: key ? item[key] : item,
+      value: item
+    })
+
+    $option.appendTo(el)
+  })
 }
 
 Base.prototype.getDate = function(date, type) {
@@ -130,6 +201,91 @@ Base.prototype.getDate = function(date, type) {
     return `${hours}:${minutes}:${seconds}`
   }
   return `${day}-${month}-${year}`
+}
+
+Base.prototype.getTimeframeFrom = function(time, type) {
+  const today = new Date();
+  let result
+
+  if(time === 0) {
+    today.setHours(today.getHours(), 0, 0, 0);
+    result = today
+  }
+  else if(time === 1) {
+    result = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  }
+  else if (time === 2) {
+    const startOfWeek = new Date(today);
+    const dayOfWeek = today.getDay();
+    const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+    startOfWeek.setDate(diff);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    result = startOfWeek
+  }
+  else if(time === 3) {
+    result = new Date(today.getFullYear(), today.getMonth(), 1);
+  }
+  else if(time === 4) {
+    result = today.setHours(today.getHours() - 1, 0, 0, 0);
+  }
+  else if(time === 5) {
+    today.setDate(today.getDate() - 1);
+    today.setHours(0, 0, 0, 0);
+    result = today
+  }
+  else if(time === 6) {
+    const lastWeekStart = new Date(today);
+    lastWeekStart.setDate(today.getDate() - 7 - today.getDay() + 1);
+    lastWeekStart.setHours(0, 0, 0, 0);
+
+    result = lastWeekStart
+  }
+  else if(time === 7) {
+    result = new Date(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0);
+  }
+
+  return this.getDate(result, type)
+}
+
+Base.prototype.getTimeframeTo = function(time, type) {
+  const today = new Date();
+  let result
+
+  if (time === 0 || time === 1 || time === 2 || time === 3) {
+    result = today
+  }
+  else if(time === 4) {
+    result = today.setHours(today.getHours(), 0, 0, 0);
+  }
+  else if(time === 5) {
+    today.setDate(today.getDate() - 1);
+    today.setHours(23, 59, 59, 999);
+    result = today
+  }
+  else if(time === 6) {
+    const lastWeekEnd = new Date(today);
+    lastWeekEnd.setDate(today.getDate() - today.getDay());
+    lastWeekEnd.setHours(23, 59, 59, 999);
+    result = lastWeekEnd
+  }
+  else if(time === 7) {
+    const last = new Date(today.getFullYear(), today.getMonth(), 0);
+    last.setHours(23, 59, 59, 999);
+    result = last
+  }
+
+  return this.getDate(result, type)
+}
+
+Base.prototype.defaultSelect = function() {
+  $('.js-select-input').select2({
+    placeholder: {
+      id: '-1',
+      // eslint-disable-next-line no-undef
+      text: language.select_values
+    }
+  });
 }
 
 Base.prototype.initTextArea = function(label, value) {

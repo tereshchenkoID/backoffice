@@ -1,8 +1,77 @@
 @use 'src/scss/config' as *;
 
 .table {
+  overflow: hidden;
   width: 100%;
   font-size: rem(14px);
+
+  &--daily-username {
+
+    .table {
+
+      &__row {
+        grid-template-columns: rem(50px) 1fr;
+      }
+
+      &__cell {
+
+        &:nth-child(2) {
+         display: none;
+        }
+      }
+
+      &__empty {
+        display: grid;
+        grid-template-columns: rem(200px) 1fr;
+        text-align: left;
+
+        span {
+
+          &:nth-child(2) {
+            @include make-spacer(pr, 200px);
+
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  &--daily-reports {
+
+    .table {
+
+      &__row {
+        grid-template-columns: 1fr rem(80px) repeat(14, 1fr);
+
+        &:nth-child(2) {
+
+          .table {
+
+            &__cell {
+
+              &:nth-child(1) {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+
+      &__cell {
+        display: block!important;
+        min-width: rem(150px);
+
+        &:nth-child(1) {
+          opacity: 0;
+        }
+
+        &:nth-child(2) {
+          min-width: rem(80px);
+        }
+      }
+    }
+  }
 
   &--tickets {
 
@@ -44,6 +113,7 @@
   &__row {
     display: grid;
     border-bottom: rem(1px) solid var(--color-border);
+    overflow-x: auto;
 
     &:first-child {
       font-weight: var(--typography-medium);

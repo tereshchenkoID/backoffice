@@ -1,0 +1,275 @@
+---
+title: Backofice
+lang: en
+---
+extends layouts/_layout
+
+block content
+  main.main
+    .paper.paper--wide.u-mb-24
+      .paper__headline
+        h5(data-lang="daily_report_search")
+
+      hr.paper__hr
+      .paper__body
+        form.paper__form.js-form-daily-sums
+          .paper__row.paper__row--4
+            .dropdown.dropdown--lg.js-dropdown.js-select-agent
+              .dropdown__label Agent
+              .dropdown__selected(data-value='0').js-dropdown-selected
+                span All
+                .dropdown__icon.js-dropdown-icon
+              .dropdown__list.js-dropdown-list
+                a.dropdown__link.dropdown__link--active(data-value='0').js-dropdown-link All
+            +select('form_timeframe', [
+              {
+                value: 0,
+                text: 'timeframe.current_hour',
+              },
+              {
+                value: 1,
+                text: 'timeframe.today',
+              },
+              {
+                value: 2,
+                text: 'timeframe.this_week'
+              },
+              {
+                value: 3,
+                text: 'timeframe.this_month'
+              },
+              {
+                value: 4,
+                text: 'timeframe.last_hour'
+              },
+              {
+                value: 5,
+                text: 'timeframe.yesterday'
+              },
+              {
+                value: 6,
+                text: 'timeframe.last_month'
+              },
+              {
+                value: 7,
+                text: 'timeframe.last_month'
+              },
+            ], true)(name="timeframe")
+
+            +field('form_date_from')(type="datetime-local" name="date-from")
+            +field('form_date_to')(type="datetime-local" name="date-to")
+          .paper__block.u-text-right
+            +button('search')(type="submit").button--primary
+            +button('cancel')(type="reset").button--default.u-ml-16
+
+    .paper.paper--wide
+      .paper__body
+        .paper__form.js-form-tables
+          .table.table--daily-username.js-table.js-table-daily-username
+
+block script
+  script.
+    loader()
+
+    $('[name="date-from"]').val(base.getTimeframeFrom(1, 'datetime-local'))
+    $('[name="date-to"]').val(base.getTimeframeTo(1, 'datetime-local'))
+
+    $('[name="timeframe"]').on('change', function() {
+      $('[name="date-from"]').val(base.getTimeframeFrom(Number($(this).val()), 'datetime-local'))
+      $('[name="date-to"]').val(base.getTimeframeTo(Number($(this).val()), 'datetime-local'))
+    })
+
+    let config = [
+      {
+        actions: 'dropdown',
+      },
+      {
+        key: 'id',
+      },
+      {
+        key: 'username',
+        text: 'daily_reports_table_1'
+      }
+    ]
+
+
+
+    let config_2 = [
+      {
+        key: 'date-from',
+        text: 'daily_reports_table_18'
+      },
+      {
+        key: 'currency',
+        text: 'daily_reports_table_16'
+      },
+      {
+        key: 'tickets',
+        text: 'daily_reports_table_2'
+      },
+      {
+        key: 'total_in',
+        text: 'daily_reports_table_3'
+      },
+      {
+        key: 'total_out',
+        text: 'daily_reports_table_4'
+      },
+      {
+        key: 'open_payouts',
+        text: 'daily_reports_table_5'
+      },
+      {
+        key: 'Jackpot_1_payout',
+        text: 'daily_reports_table_6'
+      },
+      {
+        key: 'Jackpot_2_payout',
+        text: 'daily_reports_table_7'
+      },
+      {
+        key: 'Jackpot_3_payout',
+        text: 'daily_reports_table_7'
+      },
+      {
+        key: 'Jackpot_1_contribution',
+        text: 'daily_reports_table_9',
+        fixed: true
+      },
+      {
+        key: 'Jackpot_2_contribution',
+        text: 'daily_reports_table_10',
+        fixed: true
+      },
+      {
+        key: 'Jackpot_3_contribution',
+        text: 'daily_reports_table_11',
+        fixed: true
+      },
+      {
+        key: 'reversal',
+        text: 'daily_reports_table_12'
+      },
+      {
+        key: 'commission',
+        text: 'daily_reports_table_13'
+      },
+      {
+        key: 'taxes',
+        text: 'daily_reports_table_14'
+      },
+      {
+        key: 'profit',
+        text: 'daily_reports_table_15'
+      }
+    ]
+
+    base.initAgents(
+      () => {
+        base.drawAgents(base.agents, $('.js-select-agent .js-dropdown-list'))
+        table.drawHTML($('.js-table-daily-username'), config, base.agents)
+        base.updateLanguage(window.language, document.querySelector('.js-table-daily-username'))
+      }
+    )
+
+    const handleSubmit = () => {
+      const formData = new FormData();
+      // formData.append('id', $('.js-form-daily-sums .js-dropdown-selected').attr('data-value'))
+      // formData.append('date-from', $('[name="date-from"]').val())
+      // formData.append('date-to', $('[name="date-to"]').val())
+
+      formData.append('id', '1000')
+      formData.append('date-from', '2023-10-18T00:00:00')
+      formData.append('date-to', '2023-10-18T23:59:59')
+
+      base.sendFormData(
+        formData,
+        `${base.base}dailySums/`,
+        'POST',
+        (response) => {
+          if (response) {
+            console.log(response)
+            loader()
+          }
+        },
+        null,
+        {
+          async: false
+        },
+        true
+      )
+    }
+
+    $('body').on('click', '.js-action', function () {
+      const $parent = $(this).parent()
+      const $type   = $(this).attr('data-type')
+      const $row    = $(this).closest('.js-table-row')
+      const $id     = $parent.next('[data-cell="id"]').text()
+
+      $(this).toggleClass('action--active')
+      $row.toggleClass('table__row--primary-alpha-05')
+
+      if ($type === SETTINGS.TICKET_ACTIONS.DROPDOWN) {
+        if ($(this).hasClass('action--active')) {
+          if ($(`[data-dropdown="${$id}"]`).length) {
+            $(`[data-dropdown="${$id}"]`).show()
+          }
+          else {
+            const formData = new FormData();
+            formData.append('id', $id)
+            formData.append('date-from', '2023-10-15T00:00:00')
+            formData.append('date-to', '2023-10-18T23:59:59')
+
+            base.sendFormData(
+              formData,
+              `${base.base}dailySums/`,
+              'POST',
+              (response) => {
+                if (response) {
+                  const data = response.data
+                  const $line = $(`<div class="table__row table__row--wide table__row--primary-alpha-01 js-table-row" data-dropdown="${data.id}">`)
+
+                  data.days.forEach(function(item, index){
+
+                    let html = `  <div class="table__cell js-table-cell">
+                                    <div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>
+                                  </div>`
+
+                    $line.append(html)
+
+                    table.drawHTML($line.find(`.js-table-daily-reports[data-idx="${index}"]`), config_2, item.report, item['date-from'].slice(0, 10))
+
+                    $line.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
+                  })
+
+                  if (data.clients.length > 0) {
+                    $line.append(`<div class="table__cell js-table-cell">
+                                      <div class="table table--daily-username js-table js-table-daily-username"></div>
+                                  </div>`)
+                    table.drawHTML($line.find('.js-table-daily-username'), config, data.clients)
+                  }
+
+                  $line.insertAfter($row)
+                  base.updateLanguage(window.language, document.querySelector(`[data-dropdown="${data.id}"]`))
+                }
+              },
+              null,
+              {
+                async: false
+              },
+              true
+            )
+          }
+        }
+        else {
+          $(`[data-dropdown="${$id}"]`).hide()
+        }
+      }
+    })
+
+    loader()
+
+    $('.js-form-daily-sums').on('submit', function (e) {
+      e.preventDefault()
+      handleSubmit()
+    })

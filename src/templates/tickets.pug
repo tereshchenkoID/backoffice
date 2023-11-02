@@ -28,56 +28,56 @@ block content
       .paper__body
         form.paper__form.js-form-tickets
           .paper__row.paper__row--4
-            +field('ticket_form_ticket')(type="text" name="ticket")
-            +field('ticket_form_username')(type="text" name="username")
-            +select('ticket_form_state', [
+            +field('form_ticket')(type="text" name="ticket")
+            +field('form_username')(type="text" name="username")
+            +select('form_state', [
               {
                 value: 0,
-                text: 'Any',
+                text: 'state.any',
                 selected: true,
               },
               {
                 value: 1,
-                text: 'Confirmed'
+                text: 'state.confirmed'
               },
               {
                 value: 2,
-                text: 'Finalized'
+                text: 'state.finalized'
               },
               {
                 value: 3,
-                text: 'Cancelled'
+                text: 'state.cancelled'
               },
               {
                 value: 4,
-                text: 'Unconfirmed'
+                text: 'state.unconfirmed'
               },
-            ])(name="state")
+            ], true)(name="state")
 
-            +select('ticket_form_player_type', [
+            +select('form_player_type', [
               {
                 value: 0,
-                text: 'Any',
+                text: 'player_type.any',
                 selected: true,
               },
               {
                 value: 1,
-                text: 'Shop'
+                text: 'player_type.shop'
               },
               {
                 value: 2,
-                text: 'Web'
+                text: 'player_type.web'
               },
-            ])(name="type")
+            ], true)(name="type")
           .paper__row.paper__row--4
-            +field('ticket_form_date_from')(type="datetime-local" name="date-from")
-            +field('ticket_form_date_to')(type="datetime-local" name="date-to")
-            +field('ticket_form_amount_from')(type="number" name="amount-from")
-            +field('ticket_form_amount_to')(type="number" name="amount-to")
+            +field('form_date_from')(type="datetime-local" name="date-from")
+            +field('form_date_to')(type="datetime-local" name="date-to")
+            +field('form_amount_from')(type="number" name="amount-from")
+            +field('form_amount_to')(type="number" name="amount-to")
           .paper__row.paper__row--4
-            +select('ticket_form_currency', [])(name="currency").js-select-currency
-            +field('ticket_form_payout_from')(type="number" name="payout-from")
-            +field('ticket_form_payout_to')(type="number" name="payout-to")
+            +select('form_currency', [])(name="currency").js-select-currency
+            +field('form_payout_from')(type="number" name="payout-from")
+            +field('form_payout_to')(type="number" name="payout-to")
           .paper__block.u-text-right
             +button('search')(type="submit").button--primary
             +button('cancel')(type="reset").button--default.u-ml-16

@@ -121,10 +121,5 @@ $('body').on('click', function(e) {
 /* End Events for dropdown */
 
 $(document).ready(function() {
-  $('.js-select-input').select2({
-    placeholder: {
-      id: '-1',
-      text: 'Select values'
-    }
-  });
+  base.defaultSelect()
 });
