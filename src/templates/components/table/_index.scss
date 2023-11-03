@@ -15,7 +15,7 @@
 
       &__cell {
 
-        &:nth-child(2) {
+        &[data-cell="id"] {
          display: none;
         }
       }

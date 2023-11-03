@@ -60,7 +60,7 @@ block content
             +field('form_date_to')(type="datetime-local" name="date-to")
           .paper__block.u-text-right
             +button('search')(type="submit").button--primary
-            +button('cancel')(type="reset").button--default.u-ml-16
+            +button('cancel')(type="button").button--default.u-ml-16.js-button-reset
 
     .paper.paper--wide
       .paper__body
@@ -71,12 +71,25 @@ block script
   script.
     loader()
 
-    $('[name="date-from"]').val(base.getTimeframeFrom(1, 'datetime-local'))
-    $('[name="date-to"]').val(base.getTimeframeTo(1, 'datetime-local'))
+    $('.js-form-daily-sums [name="date-from"]').val(base.getTimeframeFrom(1, 'datetime-local'))
+    $('.js-form-daily-sums [name="date-to"]').val(base.getTimeframeTo(1, 'datetime-local'))
 
-    $('[name="timeframe"]').on('change', function() {
-      $('[name="date-from"]').val(base.getTimeframeFrom(Number($(this).val()), 'datetime-local'))
-      $('[name="date-to"]').val(base.getTimeframeTo(Number($(this).val()), 'datetime-local'))
+    $('.js-form-daily-sums [name="timeframe"]').on('change', function() {
+      $('.js-form-daily-sums [name="date-from"]').val(base.getTimeframeFrom(Number($(this).val()), 'datetime-local'))
+      $('.js-form-daily-sums [name="date-to"]').val(base.getTimeframeTo(Number($(this).val()), 'datetime-local'))
+    })
+
+    $('.js-button-reset').on('click', function() {
+      $('.js-form-daily-sums [name="timeframe"]').val(-1)
+      $('.js-form-daily-sums [name="timeframe"]').trigger('change');
+
+      $('.js-form-daily-sums [name="date-from"]').val(base.getTimeframeFrom(1, 'datetime-local'))
+      $('.js-form-daily-sums [name="date-to"]').val(base.getTimeframeTo(1, 'datetime-local'))
+
+      $('.js-form-daily-sums .js-dropdown-selected').attr('data-value', 0)
+      $('.js-form-daily-sums .js-dropdown-selected span').text('All')
+      $('.js-form-daily-sums .js-dropdown-link').removeClass('dropdown__link--active')
+      $('.js-form-daily-sums .js-dropdown-link[data-value="0"]').addClass('dropdown__link--active')
     })
 
     let config = [
@@ -91,8 +104,6 @@ block script
         text: 'daily_reports_table_1'
       }
     ]
-
-
 
     let config_2 = [
       {
@@ -174,11 +185,13 @@ block script
 
     const handleSubmit = () => {
       const formData = new FormData();
-      // formData.append('id', $('.js-form-daily-sums .js-dropdown-selected').attr('data-value'))
+      const $id = $('.js-form-daily-sums .js-dropdown-selected').attr('data-value')
+
+      formData.append('id', $id === '0' ? base.agents[0].id : $id)
       // formData.append('date-from', $('[name="date-from"]').val())
       // formData.append('date-to', $('[name="date-to"]').val())
 
-      formData.append('id', '1000')
+      // formData.append('id', '1000')
       formData.append('date-from', '2023-10-18T00:00:00')
       formData.append('date-to', '2023-10-18T23:59:59')
 
@@ -188,8 +201,59 @@ block script
         'POST',
         (response) => {
           if (response) {
-            console.log(response)
-            loader()
+            const data = response.data
+
+            table.drawHTML(
+              $('.js-table-daily-username'),
+              config,
+              $id === '0'
+                ?
+                  base.agents
+                :
+                  [{
+                    id: data.id,
+                    username: $('.js-form-daily-sums .js-dropdown-selected span').text()
+                  }]
+            )
+            base.updateLanguage(window.language, document.querySelector('.js-table-daily-username'))
+
+            if ($id !== '0') {
+              const $row = $('.js-table-daily-username .js-table-row:last-child')
+              const $line = $(`<div class="table__row table__row--wide table__row--primary-alpha-01 js-table-row" data-dropdown="${data.id}">`)
+
+              $('.js-table-daily-username .js-action').toggleClass('action--active')
+              $row.toggleClass('table__row--primary-alpha-05')
+
+              data.days.forEach(function (item, index) {
+                $line.append(`<div class="table__cell js-table-cell">
+                                  <div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>
+                              </div>`)
+
+                table.drawHTML(
+                  $line.find(`.js-table-daily-reports[data-idx="${index}"]`),
+                  config_2,
+                  item.report,
+                  item['date-from'].slice(0, 10)
+                )
+
+                $line.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
+              })
+
+              if (data.clients.length > 0) {
+                $line.append(`<div class="table__cell js-table-cell">
+                                 <div class="table table--daily-username js-table js-table-daily-username"></div>
+                              </div>`)
+
+                table.drawHTML(
+                  $line.find('.js-table-daily-username'),
+                  config,
+                  data.clients
+                )
+              }
+
+              $line.insertAfter($row)
+              base.updateLanguage(window.language, document.querySelector(`[data-dropdown="${data.id}"]`))
+            }
           }
         },
         null,
@@ -228,14 +292,10 @@ block script
                 if (response) {
                   const data = response.data
                   const $line = $(`<div class="table__row table__row--wide table__row--primary-alpha-01 js-table-row" data-dropdown="${data.id}">`)
-
                   data.days.forEach(function(item, index){
-
-                    let html = `  <div class="table__cell js-table-cell">
+                    $line.append(`<div class="table__cell js-table-cell">
                                     <div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>
-                                  </div>`
-
-                    $line.append(html)
+                                  </div>`)
 
                     table.drawHTML($line.find(`.js-table-daily-reports[data-idx="${index}"]`), config_2, item.report, item['date-from'].slice(0, 10))
 

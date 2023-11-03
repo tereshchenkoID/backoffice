@@ -63,16 +63,16 @@ Table.prototype.actionHTML = function(type) {
 
 Table.prototype.emptyHTML = function(text) {
   let html = `<div class="table__row table__row--wide js-table-row">
-            <div class="table__cell js-table-cell">
-                <div class="table__empty u-full-width u-text-center u-pt-16">`
-                    if(text) {
-                      html += `<span>${text}</span>`
-                    }
+                        <div class="table__cell js-table-cell">
+                            <div class="table__empty u-full-width u-text-center u-pt-16">`
+                                if(text) {
+                                  html += `<span>${text}</span>`
+                                }
 
-  html += `        <span data-lang="rows_empty"></span>
-                </div>
-            </div>
-          </div>`
+  html += `                    <span data-lang="rows_empty"></span>
+                            </div>
+                        </div>
+                      </div>`
 
   return html
 }
