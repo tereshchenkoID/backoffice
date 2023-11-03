@@ -11,6 +11,20 @@
 
       &__row {
         grid-template-columns: rem(50px) 1fr;
+
+        &--headline {
+          grid-template-columns: rem(50px) 1fr;
+
+          .table {
+
+            &__cell {
+
+              &:nth-child(2) {
+                display: none;
+              }
+            }
+          }
+        }
       }
 
       &__cell {
@@ -42,7 +56,17 @@
     .table {
 
       &__row {
-        grid-template-columns: 1fr rem(80px) repeat(14, 1fr);
+        grid-template-columns: 1fr rem(100px) repeat(14, 1fr);
+
+        &--headline {
+
+          .table {
+
+            &__cell {
+              opacity: 1!important;
+            }
+          }
+        }
 
         &:nth-child(2) {
 
@@ -78,7 +102,7 @@
     .table {
 
       &__row {
-        grid-template-columns: repeat(10, 1fr);
+        grid-template-columns: repeat(9, 1fr) rem(135px);
       }
 
       &__cell {
@@ -115,8 +139,9 @@
     border-bottom: rem(1px) solid var(--color-border);
     overflow-x: auto;
 
-    &:first-child {
+    &--headline {
       font-weight: var(--typography-medium);
+      font-size: rem(12px);
     }
 
     &--disabled {
@@ -142,7 +167,6 @@
 
   &__cell {
     @include flex(null, center, null, wrap);
-    @include make-spacer(px, 16px);
-    @include make-spacer(py, 12px);
+    @include make-spacer(p, 12px);
   }
 }

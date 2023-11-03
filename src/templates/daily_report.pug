@@ -220,11 +220,11 @@ block script
       const $id = $('.js-form-daily-sums .js-dropdown-selected').attr('data-value')
 
       formData.append('id', $id === '0' ? base.agents[0].id : $id)
-      // formData.append('date-from', $('[name="date-from"]').val())
-      // formData.append('date-to', $('[name="date-to"]').val())
+      formData.append('date-from', $('[name="date-from"]').val())
+      formData.append('date-to', $('[name="date-to"]').val())
 
-      formData.append('date-from', '2023-10-18T00:00:00')
-      formData.append('date-to', '2023-10-18T23:59:59')
+      // formData.append('date-from', '2023-10-18T00:00:00')
+      // formData.append('date-to', '2023-10-18T23:59:59')
 
       base.sendFormData(
         formData,
@@ -284,8 +284,11 @@ block script
           else {
             const formData = new FormData();
             formData.append('id', $id)
-            formData.append('date-from', '2023-10-15T00:00:00')
-            formData.append('date-to', '2023-10-18T23:59:59')
+            formData.append('date-from', $('[name="date-from"]').val())
+            formData.append('date-to', $('[name="date-to"]').val())
+
+            // formData.append('date-from', '2023-10-15T00:00:00')
+            // formData.append('date-to', '2023-10-18T23:59:59')
 
             base.sendFormData(
               formData,
