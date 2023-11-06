@@ -184,20 +184,35 @@ block script
     )
 
     const drawTables = (data, $row, $line) => {
+      const $overflow = $(`<div class="table__overflow">`)
+
       data.days.forEach(function (item, index) {
-        $line.append(`<div class="table__cell js-table-cell">
-                         <div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>
-                      </div>`)
+        $overflow.append(`<div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>`)
 
         table.drawHTML(
-          $line.find(`.js-table-daily-reports[data-idx="${index}"]`),
+          $overflow.find(`.js-table-daily-reports[data-idx="${index}"]`),
           config_2,
           item.report,
-          item['date-from'].slice(0, 10)
+          item['date-from'].slice(0, 10),
         )
 
-        $line.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
+        $overflow.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
+
+        // $line.append(`<div class="table__cell js-table-cell">
+        //                  <div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>
+        //               </div>`)
+        //
+        // table.drawHTML(
+        //   $line.find(`.js-table-daily-reports[data-idx="${index}"]`),
+        //   config_2,
+        //   item.report,
+        //   item['date-from'].slice(0, 10),
+        // )
+        //
+        // $line.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
       })
+
+      $line.append($overflow)
 
       if (data.clients.length > 0) {
         $line.append(`<div class="table__cell js-table-cell">
@@ -284,11 +299,11 @@ block script
           else {
             const formData = new FormData();
             formData.append('id', $id)
-            formData.append('date-from', $('[name="date-from"]').val())
-            formData.append('date-to', $('[name="date-to"]').val())
+            // formData.append('date-from', $('[name="date-from"]').val())
+            // formData.append('date-to', $('[name="date-to"]').val())
 
-            // formData.append('date-from', '2023-10-15T00:00:00')
-            // formData.append('date-to', '2023-10-18T23:59:59')
+            formData.append('date-from', '2023-10-15T00:00:00')
+            formData.append('date-to', '2023-10-18T23:59:59')
 
             base.sendFormData(
               formData,

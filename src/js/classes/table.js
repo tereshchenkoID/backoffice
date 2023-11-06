@@ -102,7 +102,7 @@ Table.prototype.drawHTML = function(el, config, data, empty = null) {
   let html = ''
   const self = this
 
-  html += `<div class="table__row table__row--headline js-table-row sa-sticky">`
+  html += `<div class="table__row table__row--headline js-table-row">`
   config.forEach(function(item) {
     if (item.text)
       html += `<div class="table__cell js-table-cell" data-lang="${item.text}"></div>`

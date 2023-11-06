@@ -5,6 +5,35 @@
   width: 100%;
   font-size: rem(14px);
 
+  &__overflow {
+    @include make-spacer(p, 12px);
+
+    overflow-x: auto;
+
+    .table {
+
+      &--daily-reports {
+
+        &:not(&:nth-child(1)) {
+          border-top: 1px solid var(--color-primary);
+
+          .table {
+
+            &__row {
+
+              &--headline {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+                visibility: hidden;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   &--daily-username {
 
     .table {
@@ -52,6 +81,7 @@
   }
 
   &--daily-reports {
+    width: fit-content;
 
     .table {
 
@@ -137,7 +167,6 @@
   &__row {
     display: grid;
     border-bottom: rem(1px) solid var(--color-border);
-    overflow-x: auto;
 
     &--headline {
       font-weight: var(--typography-medium);
