@@ -34,6 +34,49 @@
     }
   }
 
+  &--accounts {
+
+    .table {
+
+      &__row {
+        grid-template-columns: rem(100px) repeat(6, 1fr) rem(160px);
+
+        &--headline {
+
+          .table {
+
+            &__cell {
+
+              &:nth-child(2),
+              &:nth-child(3),
+              &:nth-child(4) {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+
+      &__block {
+        width: 100%;
+      }
+
+      &__cell {
+
+        &[data-cell="id"],
+        &[data-cell="shops"],
+        &[data-cell="subclients"] {
+          display: none;
+        }
+
+        &[data-cell="credits"],
+        &[data-cell="commission"] {
+          display: block;
+        }
+      }
+    }
+  }
+
   &--daily-username {
 
     .table {
@@ -197,5 +240,21 @@
   &__cell {
     @include flex(null, center, null, wrap);
     @include make-spacer(p, 12px);
+  }
+
+  &__dropdown {
+    @include line-clamp(2);
+
+    &--show {
+      -webkit-line-clamp: unset!important;
+    }
+  }
+
+  &__more {
+    @include make-spacer(mt, 10px);
+
+    width: 100%;
+    text-align: left;
+    color: var(--color-primary)
   }
 }

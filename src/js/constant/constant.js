@@ -1,12 +1,12 @@
 const SETTINGS = {
 
-  TICKET_STATUSES: {
-    0:  'CONFIRMED',
-    4:  'LOSE',
-    5:  'WON (Not Paid)',
-    6:  'WON (Paid Out)',
-    9:  'EXPIRED',
-    13: 'CANCELLED'
+  API: {
+    tree:         'tree/',
+    accounts:     'accounts/',
+    shops:        'shops/',
+    tickets:      'tickets/',
+    daily_sums:   'dailySums/',
+    currencies:   'currencies/'
   },
 
   STAKE_STATUSES: {
@@ -14,6 +14,20 @@ const SETTINGS = {
     4:  'LOSE',
     5:  'WIN',
     13: 'CANCEL',
+  },
+
+  // LOCKED: {
+  //   0: 'NO',
+  //   1: 'YES',
+  // },
+
+  TICKET_STATUSES: {
+    0:  'CONFIRMED',
+    4:  'LOSE',
+    5:  'WON (Not Paid)',
+    6:  'WON (Paid Out)',
+    9:  'EXPIRED',
+    13: 'CANCELLED'
   },
 
   TICKET_ACTIONS: {

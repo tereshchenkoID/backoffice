@@ -197,19 +197,6 @@ block script
         )
 
         $overflow.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
-
-        // $line.append(`<div class="table__cell js-table-cell">
-        //                  <div class="table table--daily-reports js-table js-table-daily-reports" data-idx="${index}"></div>
-        //               </div>`)
-        //
-        // table.drawHTML(
-        //   $line.find(`.js-table-daily-reports[data-idx="${index}"]`),
-        //   config_2,
-        //   item.report,
-        //   item['date-from'].slice(0, 10),
-        // )
-        //
-        // $line.find(`.js-table-daily-reports[data-idx="${index}"] [data-cell="date-from"]`).text(item['date-from'].slice(0, 10))
       })
 
       $line.append($overflow)
@@ -243,7 +230,7 @@ block script
 
       base.sendFormData(
         formData,
-        `${base.base}dailySums/`,
+        `${base.base}${SETTINGS.API.daily_sums}`,
         'POST',
         (response) => {
           if (response) {
@@ -307,7 +294,7 @@ block script
 
             base.sendFormData(
               formData,
-              `${base.base}dailySums/`,
+              `${base.base}${SETTINGS.API.daily_sums}`,
               'POST',
               (response) => {
                 if (response) {

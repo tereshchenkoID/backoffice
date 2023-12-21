@@ -1,11 +1,11 @@
 import tostify from "../plugins/tostify";
 import loader from "../functions/loader";
-import Table from "./table";
 
 export default function Base() {
   this.base     = 'https://api.qool90.bet/api/'
   this.language = localStorage.getItem('lang') || 'en'
   this.agents   = []
+  this.settings = []
 }
 
 Base.prototype.updateDateTime = function() {
@@ -144,7 +144,22 @@ Base.prototype.drawAgents = function(data, $parent) {
     $group.append($newGroup);
   });
 
-  $parent.append($group);
+  if ($parent) {
+    $parent.append($group)
+    return true
+  }
+
+  return `<div class="dropdown dropdown--lg js-dropdown js-select-agent">
+            <div class="dropdown__label">Agent</div>
+            <div class="dropdown__selected js-dropdown-selected" data-value="0">
+              <span>All</span>
+              <div class="dropdown__icon js-dropdown-icon"></div>
+            </div>
+            <div class="dropdown__list js-dropdown-list">
+              <a class="dropdown__link dropdown__link--active js-dropdown-link" data-value="0">All</a>
+              ${$group.html()}
+            </div>
+          </div>`
 }
 
 Base.prototype.initAgents = function(success) {
@@ -173,15 +188,34 @@ Base.prototype.handleOutsideClick = function(element, event, callback) {
   }
 }
 
-Base.prototype.initDynamicSelect = function(url, el, key = null) {
-  this.agents.forEach(function (item) {
-    const $option = $('<option>', {
-      text: key ? item[key] : item,
-      value: item
-    })
+Base.prototype.initDynamicSelect = function(value, data) {
+  const self = this
+  this.sendFormData(
+    null,
+    `${this.base}settings/`,
+    'GET',
+    (response) => {
+      if (response) {
+        self.settings = response
 
-    $option.appendTo(el)
-  })
+        data.forEach(function(el) {
+          response[el.name].forEach(function (item, index) {
+            const $option = $('<option>', {
+              text: item,
+              value: el.key ? item : index
+            })
+
+            $option.appendTo(el.element)
+          })
+        })
+      }
+    },
+    null,
+    {
+      async: false
+    },
+    false
+  )
 }
 
 Base.prototype.getDate = function(date, type) {

@@ -3,7 +3,6 @@ import SETTINGS from "../constant/constant";
 export default function Table() {
   this.data     = []
   this.keys     = []
-  this.navbar   = []
   this.navigation = {
     all: 0,
     pages: 0,
@@ -44,6 +43,10 @@ Table.prototype.updateNavigation = function(type) {
 
 Table.prototype.actionHTML = function(type) {
   switch (type) {
+    case SETTINGS.TICKET_ACTIONS.PASSWORD:
+      return `<button class="action action--password js-action" title="Password" data-type="${SETTINGS.TICKET_ACTIONS.PASSWORD}"><i class="fa fa-lock"></i></button>`
+    case SETTINGS.TICKET_ACTIONS.TRANSFER:
+      return `<button class="action action--calculate js-action" title="Transfer" data-type="${SETTINGS.TICKET_ACTIONS.TRANSFER}"><i class="fa fa-exchange-alt"></i></button>`
     case SETTINGS.TICKET_ACTIONS.CALCULATE:
       return `<button class="action action--calculate action--disabled js-action" title="Calculate" data-type="${SETTINGS.TICKET_ACTIONS.CALCULATE}"><i class="fa fa-calculator"></i></button>`
     case SETTINGS.TICKET_ACTIONS.CANCEL:
@@ -98,18 +101,20 @@ Table.prototype.getPath = function(data, el) {
   return result
 }
 
-Table.prototype.drawHTML = function(el, config, data, empty = null) {
+Table.prototype.drawHTML = function(el, config, data, empty = null, header = true) {
   let html = ''
   const self = this
 
-  html += `<div class="table__row table__row--headline js-table-row">`
-  config.forEach(function(item) {
-    if (item.text)
-      html += `<div class="table__cell js-table-cell" data-lang="${item.text}"></div>`
-    else
-      html += `<div class="table__cell js-table-cell"></div>`
-  })
-  html += '</div>'
+  if (header) {
+    html += `<div class="table__row table__row--headline js-table-row">`
+    config.forEach(function(item) {
+      if (item.text)
+        html += `<div class="table__cell js-table-cell" data-lang="${item.text}"></div>`
+      else
+        html += `<div class="table__cell js-table-cell"></div>`
+    })
+    html += '</div>'
+  }
 
   if (data.length) {
     data.forEach(function(item){
@@ -128,6 +133,29 @@ Table.prototype.drawHTML = function(el, config, data, empty = null) {
         if (idx.key) {
           let value = item[idx.key]
 
+          if (window.base.settings[idx.key]) {
+            value = window.base.settings[idx.key][item[idx.key]]
+          }
+
+          if (typeof value === 'object') {
+
+            if (Array.isArray(value)) {
+              // console.log('Array')
+            }
+            if (item[idx.key] && idx.dropdown) {
+              value = `<div class="table__dropdown js-table-dropdown" style="-webkit-line-clamp: ${idx.dropdown}">`
+              // eslint-disable-next-line guard-for-in,no-restricted-syntax
+              for (const key in item[idx.key]) {
+                value += `<div class="table__block">${key} ${item[idx.key][key]}</div>`
+              }
+              value += `</div>`
+
+              if (idx.dropdown < Object.keys(item[idx.key]).length) {
+                value += `<button class="table__more js-table-more">Read more</button>`
+              }
+            }
+          }
+
           if (idx.key.indexOf('.') !== -1) {
             value = self.getPath(idx.key, item)
           }
@@ -139,7 +167,6 @@ Table.prototype.drawHTML = function(el, config, data, empty = null) {
           if (!value) {
             value = ''
           }
-
 
           // if (idx.replace) {
           //   value = `${item[idx.replace]} ${value}`
@@ -157,5 +184,10 @@ Table.prototype.drawHTML = function(el, config, data, empty = null) {
     html += self.emptyHTML(empty)
   }
 
-  el.html(html)
+  if (el) {
+    el.html(html)
+
+    return true
+  }
+  return html
 }

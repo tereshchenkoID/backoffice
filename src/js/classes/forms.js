@@ -5,12 +5,26 @@ export default function Forms() {
 Forms.prototype.html = function(key, data) {
   if (data.type === 'text' || data.type === 'password' || data.type === 'email' || data.type === 'number') {
     let html = ''
+    let options = ''
+
+    if (data.options) {
+      data.options.forEach(item => {
+        options+= item
+      })
+    }
+
     html+= `<div class="field js-field">
-                <input class="field__input js-field-input" type="${data.type}" name="${key}" autocomplete="${key}" value="${data.value || ''}" required="">
+                <input class="field__input js-field-input"
+                  type="${data.type}"
+                  name="${key}"
+                  autocomplete="${key}"
+                  value="${data.value || ''}"
+                  ${options}
+                />
                 <label class="field__label js-field-label">${data.placeholder}</label>`
 
                 if(data.type === 'password') {
-                  html += `<button class="field__eye js-field-eye"><i class="fa fa-eye"></i></button>`
+                  html += `<button class="field__eye js-field-eye" type="button"><i class="fa fa-eye"></i></button>`
                 }
     html += `</div>`
 
@@ -36,6 +50,10 @@ Forms.prototype.html = function(key, data) {
              </div>`
 
     return html
+  }
+
+  if(data.type === 'dropdown') {
+    return window.base.drawAgents(data.data)
   }
 
   if (data.type === 'textarea') {

@@ -200,7 +200,16 @@ block script
     $('[name="date-to"]').val(base.getDate(new Date(), 'datetime-local'))
     $('[name="quantity"]').val(table.navigation.quantity)
 
-    base.initDynamicSelect('currencies/', $('.js-select-currency'))
+    base.initDynamicSelect(
+      'settings/',
+      [
+        {
+          element: $('.js-select-currency'),
+          name: 'currencies',
+          key: true
+        }
+      ]
+    )
 
     loader()
     let data = {}
@@ -235,7 +244,7 @@ block script
 
       base.sendFormData(
         formData,
-        `${base.base}/tickets/`,
+        `${base.base}${SETTINGS.API.tickets}`,
         'POST',
         (response) => {
           if (response) {
@@ -272,8 +281,6 @@ block script
       )
     }
 
-    // table.drawHTML($('.js-table-tickets'), config, [])
-
     handleSubmit()
 
     const actionDropdown = ($el, $id, $row) => {
@@ -300,7 +307,7 @@ block script
 
           base.sendFormData(
             null,
-            `${base.base}tickets/details/?id=${$id}`,
+            `${base.base}${SETTINGS.API.tickets}details/?id=${$id}`,
             'GET',
             (response) => {
               if (response) {
@@ -390,7 +397,7 @@ block script
 
         base.sendFormData(
           JSON.stringify(data[$id]),
-          `${base.base}tickets/calculate/?id=${$id}`,
+          `${base.base}${SETTINGS.API.tickets}calculate/?id=${$id}`,
           'POST',
           (response) => {
             if (response) {
